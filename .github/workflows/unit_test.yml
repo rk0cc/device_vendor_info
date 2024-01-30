@@ -1,0 +1,35 @@
+name: Unit test
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/unit_test.yaml'
+      - 'bundle/**/*.dart'
+jobs:
+  unittest:
+    name: Flutter unit test
+    env:
+      working-directory: './builder'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        sdkver:
+          - '3.x'
+          - '3.16.x'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: ${{ matrix.sdkver }}
+      - name: Get dependencies
+        working-directory: ${{ env.working-directory }}
+        run: flutter pub get
+      - name: Perform test
+        working-directory: ${{ env.working-directory }}
+        run: flutter test .
+  
