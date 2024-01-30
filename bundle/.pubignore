@@ -1,1 +1,5 @@
 test/
+/example/linux/
+/example/macos/
+/example/windows/
+build/
