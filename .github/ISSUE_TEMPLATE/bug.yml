@@ -1,0 +1,35 @@
+name: Bug report
+description: Report unusual bahaviours of loaders
+labels:
+  - bug
+body:
+  - type: dropdown
+    attributes:
+      label: Operating system
+      multiple: false
+      options:
+        - Windows
+        - macOS
+        - Linux
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: "`device_vendor_info` package version"
+      description: "Please find it in `pubspec.lock`"
+      placeholder: "0.1.0"
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Description of the bugs
+      description: Explain how the bugs occured. Optionally, provides some screenshot for better confirmations.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Debug console logs
+      description: Copy and paste debug console when the bug occured.
+      render: plain text
+    validations:
+      required: false
