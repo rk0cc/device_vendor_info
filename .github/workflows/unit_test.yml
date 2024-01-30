@@ -4,13 +4,13 @@ on:
     branches:
       - main
     paths:
-      - '.github/workflows/unit_test.yaml'
+      - '.github/workflows/unit_test.yml'
       - 'bundle/**/*.dart'
 jobs:
   unittest:
     name: Flutter unit test
     env:
-      working-directory: './builder'
+      working-directory: './bundle'
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
