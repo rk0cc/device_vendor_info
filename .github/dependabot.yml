@@ -1,0 +1,46 @@
+version: 2
+updates:
+  - directory: /
+    package-ecosystem: github-actions
+    schedule:
+      interval: monthly
+      timezone: Asia/Hong_Kong
+      day: thursday
+      time: 15:00
+  - directory: /bundle/
+    open-pull-requests-limit: 1
+    package-ecosystem: pub
+    ignore:
+      - dependency-name: device_vendor_info_interface
+      - dependency-name: device_vendor_info_unix
+      - dependency-name: device_vendor_info_windows
+    schedule:
+      timezone: Asia/Hong_Kong
+      interval: monthly
+      time: 15:00
+      day: monday
+  - directory: /unix/
+    package-ecosystem: pub
+    ignore:
+      - dependency-name: device_vendor_info_interface
+    schedule:
+      timezone: Asia/Hong_Kong
+      interval: monthly
+      time: 15:00
+      day: monday
+  - directory: /windows/
+    package-ecosystem: pub
+    ignore:
+      - dependency-name: device_vendor_info_interface
+    schedule:
+      timezone: Asia/Hong_Kong
+      interval: monthly
+      time: 15:00
+      day: monday
+  - directory: /interface/
+    package-ecosystem: pub
+    schedule:
+      timezone: Asia/Hong_Kong
+      interval: monthly
+      time: 15:00
+      day: monday
