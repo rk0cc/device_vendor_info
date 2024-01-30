@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:async/async.dart';
 import 'package:meta/meta.dart';
 import 'package:path/path.dart' as p;
 
@@ -17,37 +16,41 @@ typedef DmiMap = Map<String, String>;
 typedef DmiEntity = (DmiCategory category, String value);
 
 extension _DmiEntityStringifier on DmiEntity {
-  String toRawString() => "${$1.name}_${$2}".toLowerCase();
+  String toRawString() {
+    var (cat, val) = this;
+
+    return "${cat.name}_$val".toLowerCase();
+  }
 }
 
 /// A [Map]-like based reader for getting hardware information
 /// from DMI directory.
 @internal
 final class DmiDirectoryReader {
-  final AsyncMemoizer<DmiMap> _dmiMapMemorizer = AsyncMemoizer();
-
   /// Construct a reader that ready to fetch hardware information.
-  DmiDirectoryReader() {
+  const DmiDirectoryReader();
+
+  Future<DmiMap> get _dmiMap async {
     final Directory dmi = Directory(r"/sys/class/dmi/id/");
     assert(dmi.isAbsolute);
 
-    _dmiMapMemorizer.runOnce(() async => await dmi.exists()
-        ? Map.unmodifiable({
-            await for (File f in dmi
-                .list(followLinks: false)
-                .where((event) =>
-                    event is File && _isReadable(event.statSync().modeString()))
-                .cast<File>())
-              p.basename(f.path): f.readAsStringSync()
-          })
-        : const <String, String>{});
+    if (!await dmi.exists()) {
+      return const <String, String>{};
+    }
+
+    bool isReadable(String mode) =>
+        RegExp(r"(?:r(?:w|-)(?:x|-)){3}$", caseSensitive: true, dotAll: false)
+            .hasMatch(mode);
+
+    return Map.unmodifiable({
+      await for (File f in dmi
+          .list(followLinks: false)
+          .where((event) =>
+              event is File && isReadable(event.statSync().modeString()))
+          .cast<File>())
+        p.basename(f.path): f.readAsStringSync()
+    });
   }
-
-  static bool _isReadable(String mode) =>
-      RegExp(r"(?:r(?:w|-)(?:x|-)){3}$", caseSensitive: true, dotAll: false)
-          .hasMatch(mode);
-
-  Future<DmiMap> get _dmiMap => _dmiMapMemorizer.future;
 
   /// Get DMI content to [String].
   ///

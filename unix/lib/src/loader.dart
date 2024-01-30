@@ -21,7 +21,7 @@ final class UnixDeviceVendorInfoLoader implements DeviceVendorInfoLoader {
       throw UnsupportedError(
           "Using real information to perform test is forbidden.");
     }
-    _dmiDir = DmiDirectoryReader();
+    _dmiDir = const DmiDirectoryReader();
   }
 
   @override
