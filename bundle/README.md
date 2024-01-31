@@ -1,5 +1,9 @@
 # Hardware information getter in Flutter environment
 
+<p align="center">
+    <a link="https://pub.dev/packages/device_vendor_info"><img alt="Pub Version" src="https://img.shields.io/pub/v/device_vendor_info?style=flat-square&logo=flutter"/></a>
+</p>
+
 This package offers additional hardware informations regarding on BIOS, motherboard and system that it enables software to allow/restrict features to specific vendors.
 
 ## Usages
