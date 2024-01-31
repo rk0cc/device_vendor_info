@@ -50,3 +50,12 @@ final class DeviceVendorInfo {
     _instance = newInstance ?? _releaseLoader;
   }
 }
+
+/// Direct callback for fetching [BiosInfo] from [DeviceVendorInfo.instance].
+Future<BiosInfo> getBiosInfo() => DeviceVendorInfo.instance.biosInfo;
+
+/// Direct callback for fetching [BoardInfo] from [DeviceVendorInfo.instance].
+Future<BoardInfo> getBoardInfo() => DeviceVendorInfo.instance.boardInfo;
+
+/// Direct callback for fetching [SystemInfo] from [DeviceVendorInfo.instance].
+Future<SystemInfo> getSystemInfo() => DeviceVendorInfo.instance.systemInfo;
