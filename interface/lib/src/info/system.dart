@@ -1,3 +1,7 @@
+import 'package:json_annotation/json_annotation.dart';
+
+part 'system.g.dart';
+
 /// A collection of device's system description.
 ///
 /// It more likely available from pre-built computer
@@ -5,6 +9,7 @@
 /// applied and all properties will be returned either
 /// [Null] or empty [String] depending applied
 /// operating system.
+@JsonSerializable()
 final class SystemInfo {
   /// Familly series of this system.
   ///
@@ -30,4 +35,6 @@ final class SystemInfo {
       required this.manufacturer,
       required this.productName,
       required this.version});
+
+  Map<String, dynamic> toJson() => Map.unmodifiable(_$SystemInfoToJson(this));
 }
