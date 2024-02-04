@@ -2,15 +2,14 @@ import 'dart:io';
 import 'dart:isolate';
 
 import 'package:async/async.dart';
+import 'package:device_vendor_info_interface/definitions.dart' as dvi_def;
 import 'package:device_vendor_info_interface/interface.dart';
-import 'package:intl/intl.dart';
 import 'package:win32_registry/win32_registry.dart';
 
 /// Windows base [DeviceVendorInfoLoader] that to obtain hardware information
 /// by reading Windows [Registry].
 final class WindowsDeviceVendorInfoLoader implements DeviceVendorInfoLoader {
   static const String _infoKeyPath = r"HARDWARE\DESCRIPTION\System\BIOS";
-  static final DateFormat _usDateFormat = DateFormat("MM/dd/yyyy");
 
   final AsyncMemoizer<BiosInfo> _biosInfo = AsyncMemoizer();
   final AsyncMemoizer<BoardInfo> _boardInfo = AsyncMemoizer();
@@ -51,7 +50,7 @@ final class WindowsDeviceVendorInfoLoader implements DeviceVendorInfoLoader {
                 version: k.getValueAsString("BIOSVersion"),
                 releaseDate: releaseDate == null
                     ? null
-                    : _usDateFormat.parse(releaseDate));
+                    : dvi_def.biosDateFormat.parse(releaseDate));
           }));
 
   @override
