@@ -24,5 +24,6 @@ final class BiosInfo {
   const BiosInfo(
       {required this.vendor, required this.version, required this.releaseDate});
 
+  /// Return an unmodifiable [Map] to notate information of [BiosInfo].
   Map<String, dynamic> toJson() => Map.unmodifiable(_$BiosInfoToJson(this));
 }

@@ -20,5 +20,6 @@ final class BoardInfo {
       required this.productName,
       required this.version});
 
+  /// Return an unmodifiable [Map] to notate information of [BoardInfo].
   Map<String, dynamic> toJson() => Map.unmodifiable(_$BoardInfoToJson(this));
 }

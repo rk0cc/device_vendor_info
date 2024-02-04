@@ -36,5 +36,6 @@ final class SystemInfo {
       required this.productName,
       required this.version});
 
+  /// Return an unmodifiable [Map] to notate information of [SystemInfo].
   Map<String, dynamic> toJson() => Map.unmodifiable(_$SystemInfoToJson(this));
 }
