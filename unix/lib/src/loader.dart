@@ -1,18 +1,17 @@
 import 'dart:io';
 
 import 'package:async/async.dart';
+import 'package:device_vendor_info_interface/definitions.dart' as dvi_def;
 import 'package:device_vendor_info_interface/interface.dart';
-import 'package:intl/intl.dart';
 
 import 'dmi.dart';
 
 /// UNIX based [DeviceVendorInfoLoader] for getting hardware information.
 final class UnixDeviceVendorInfoLoader implements DeviceVendorInfoLoader {
-  static final DateFormat _usDateFormat = DateFormat("MM/dd/yyyy");
-
   final AsyncMemoizer<BiosInfo> _biosInfo = AsyncMemoizer();
   final AsyncMemoizer<BoardInfo> _boardInfo = AsyncMemoizer();
   final AsyncMemoizer<SystemInfo> _systemInfo = AsyncMemoizer();
+
   late final DmiDirectoryReader _dmiDir;
 
   /// Construct new instance for fetching hardward information.
@@ -31,8 +30,9 @@ final class UnixDeviceVendorInfoLoader implements DeviceVendorInfoLoader {
         return BiosInfo(
             vendor: await _dmiDir[(DmiCategory.bios, "vendor")],
             version: await _dmiDir[(DmiCategory.bios, "version")],
-            releaseDate:
-                releaseDate == null ? null : _usDateFormat.parse(releaseDate));
+            releaseDate: releaseDate == null
+                ? null
+                : dvi_def.biosDateFormat.parse(releaseDate));
       });
 
   @override

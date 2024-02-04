@@ -1,3 +1,7 @@
+## 0.2.0
+
+* Remove `intl` as direct dependency.
+
 ## 0.1.2
 
 * Rearrange DMI component getting data process
