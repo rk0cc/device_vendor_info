@@ -29,8 +29,6 @@ jobs:
       - name: Get dependencies
         working-directory: ${{ env.working-directory }}
         run: flutter pub get
-      - name: Execute builder
-        run: dart run build_runner build
       - name: Perform test
         working-directory: ${{ env.working-directory }}
         run: flutter test .
