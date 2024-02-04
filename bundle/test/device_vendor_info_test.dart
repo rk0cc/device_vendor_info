@@ -1,6 +1,7 @@
 @TestOn("windows || mac-os || linux")
 
 import 'package:device_vendor_info/device_vendor_info.dart';
+import 'package:device_vendor_info/instance.dart';
 import 'package:device_vendor_info/testing.dart';
 import 'package:flutter_test/flutter_test.dart';
 

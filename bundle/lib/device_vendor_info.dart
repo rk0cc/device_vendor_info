@@ -2,54 +2,10 @@
 library device_vendor_info;
 
 import 'package:device_vendor_info_interface/interface.dart';
-import 'package:device_vendor_info_unix/device_vendor_info_unix.dart';
-import 'package:device_vendor_info_windows/device_vendor_info_windows.dart';
-import 'package:flutter/foundation.dart';
+import 'src/instance.dart';
 
-export 'package:device_vendor_info_interface/interface.dart';
-
-/// Entry class for fetching device information.
-///
-/// It only serves for instance managment of [DeviceVendorInfoLoader] which is
-/// a handler for extracting hardware information.
-final class DeviceVendorInfo {
-  static DeviceVendorInfoLoader? _instance;
-
-  const DeviceVendorInfo._();
-
-  static DeviceVendorInfoLoader get _releaseLoader =>
-      switch (defaultTargetPlatform) {
-        TargetPlatform.linux ||
-        TargetPlatform.macOS =>
-          UnixDeviceVendorInfoLoader(),
-        TargetPlatform.windows => WindowsDeviceVendorInfoLoader(),
-        _ =>
-          throw UnsupportedError("Unable to get loader for unsupported system")
-      };
-
-  /// Get current instance for fetching hardware information.
-  ///
-  /// If the [instance] getter called directly, it will aggigned real
-  /// [DeviceVendorInfoLoader] which disallowed for running testes.
-  ///
-  /// Moreover, this library only supported Windows, macOS and Linux.
-  /// Running unsupported platform will lead to throws [UnsupportedError].
-  static DeviceVendorInfoLoader get instance {
-    _instance ??= _releaseLoader;
-
-    return _instance!;
-  }
-
-  /// Change [DeviceVendorInfoLoader] instance for future uses.
-  ///
-  /// If [newInstance] assigned as [Null], it will assign
-  /// productive version of [DeviceVendorInfoLoader] or
-  /// throwning [UnsupportedError] if using under
-  /// unsupported platform.
-  static set instance(DeviceVendorInfoLoader? newInstance) {
-    _instance = newInstance ?? _releaseLoader;
-  }
-}
+export 'package:device_vendor_info_interface/interface.dart'
+    show BiosInfo, BoardInfo, SystemInfo;
 
 /// Direct callback for fetching [BiosInfo] from [DeviceVendorInfo.instance].
 Future<BiosInfo> getBiosInfo() => DeviceVendorInfo.instance.biosInfo;
@@ -59,3 +15,12 @@ Future<BoardInfo> getBoardInfo() => DeviceVendorInfo.instance.boardInfo;
 
 /// Direct callback for fetching [SystemInfo] from [DeviceVendorInfo.instance].
 Future<SystemInfo> getSystemInfo() => DeviceVendorInfo.instance.systemInfo;
+
+/// Get [BiosInfo] (`bios` key in [Map]), [BoardInfo] (`mother_board` key in [Map])
+/// and [SystemInfo] (`system` key in [Map]) into an unmodifiable [Map].
+Future<Map<String, dynamic>> exportVendorInfoToJson() async =>
+    Map.unmodifiable(<String, dynamic>{
+      "bios": await getBiosInfo().then((value) => value.toJson()),
+      "mother_board": await getBoardInfo().then((value) => value.toJson()),
+      "system": await getSystemInfo().then((value) => value.toJson())
+    });

@@ -18,7 +18,7 @@ class DeviceInfoPage extends StatefulWidget {
 class _DeviceInfoPageState extends State<DeviceInfoPage> {
   Container _buildInfoWidget<T extends Object>(BuildContext context,
       {required String displayName,
-      required Future<T> Function(DeviceVendorInfoLoader loader) infoFetch,
+      required Future<T> Function() infoFetch,
       required List<ListTile> Function(T info) result}) {
     final ThemeData currentTheme = Theme.of(context);
 
@@ -34,7 +34,7 @@ class _DeviceInfoPageState extends State<DeviceInfoPage> {
                       color: currentTheme.dividerColor, fontSize: 12)),
               const Divider(),
               FutureBuilder<T>(
-                  future: infoFetch(DeviceVendorInfo.instance),
+                  future: infoFetch(),
                   builder: (context, snapshot) {
                     if (snapshot.hasError) {
                       return const Icon(Icons.error_outline);
@@ -62,7 +62,7 @@ class _DeviceInfoPageState extends State<DeviceInfoPage> {
               child: ListView(children: [
             _buildInfoWidget<BiosInfo>(context,
                 displayName: "BIOS",
-                infoFetch: (loader) => loader.biosInfo,
+                infoFetch: getBiosInfo,
                 result: (info) => <ListTile>[
                       ListTile(
                           title: const Text("Vendor name"),
@@ -79,7 +79,7 @@ class _DeviceInfoPageState extends State<DeviceInfoPage> {
                     ]),
             _buildInfoWidget<BoardInfo>(context,
                 displayName: "Motherboard",
-                infoFetch: (loader) => loader.boardInfo,
+                infoFetch: getBoardInfo,
                 result: (info) => <ListTile>[
                       ListTile(
                           title: const Text("Product name"),
@@ -93,7 +93,7 @@ class _DeviceInfoPageState extends State<DeviceInfoPage> {
                     ]),
             _buildInfoWidget<SystemInfo>(context,
                 displayName: "System",
-                infoFetch: (loader) => loader.systemInfo,
+                infoFetch: getSystemInfo,
                 result: (info) => <ListTile>[
                       ListTile(
                           title: const Text("Family"),
