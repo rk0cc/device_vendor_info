@@ -25,7 +25,7 @@ jobs:
         run: flutter pub get
       - name: Run build file
         working-directory: ${{ env.working-directory }}
-        run: flutter run build_runner run
+        run: flutter run build_runner build
       - name: Assign Git configurations
         run: |
           git config --local user.name "rk0cc"
