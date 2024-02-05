@@ -1,11 +1,11 @@
-name: Unit test
+name: Bundle action
 on:
   push:
     branches:
       - main
     paths:
-      - '.github/workflows/unit_test.yml'
-      - 'bundle/**/*.dart'
+      - '.github/workflows/bundle.yml'
+      - 'bundle/**.dart'
 jobs:
   unittest:
     name: Flutter unit test

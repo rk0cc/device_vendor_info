@@ -1,0 +1,49 @@
+name: Interface library actions
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/interface.yml'
+      - 'interface/**.dart'
+      - '!interface/**.g.dart'
+jobs:
+  genfile:
+    name: Generate file
+    env:
+      working-directory: './interface'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - name: Get dependencies
+        working-directory: ${{ env.working-directory }}
+        run: flutter pub get
+      - name: Run build file
+        working-directory: ${{ env.working-directory }}
+        run: flutter run build_runner run
+      - name: Assign Git configurations
+        run: |
+          git config --local user.name "rk0cc"
+          git config --local user.email "enquiry@rk0cc.xyz"
+      - name: Calculate difference
+        id: difference
+        working-directory: ${{ env.working-directory }}
+        run: git diff --quiet
+        continue-on-error: true
+      - name: Add and commit generated files
+        if: steps.difference.outcome == 'failure'
+        working-directory: ${{ env.working-directory }}
+        run: |
+          git add .
+          git commit -m "Commit gen files"
+      - name: Push generated files
+        if: steps.difference.outcome == 'failure'
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: main
