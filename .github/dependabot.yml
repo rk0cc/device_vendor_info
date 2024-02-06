@@ -6,7 +6,7 @@ updates:
       interval: monthly
       timezone: Asia/Hong_Kong
       day: thursday
-      time: '15:00'
+      time: "15:00"
   - directory: /bundle/
     open-pull-requests-limit: 1
     package-ecosystem: pub
@@ -17,7 +17,7 @@ updates:
     schedule:
       timezone: Asia/Hong_Kong
       interval: monthly
-      time: '15:00'
+      time: "15:00"
       day: monday
   - directory: /unix/
     package-ecosystem: pub
@@ -26,7 +26,7 @@ updates:
     schedule:
       timezone: Asia/Hong_Kong
       interval: monthly
-      time: '15:00'
+      time: "15:00"
       day: monday
   - directory: /windows/
     package-ecosystem: pub
@@ -42,5 +42,5 @@ updates:
     schedule:
       timezone: Asia/Hong_Kong
       interval: monthly
-      time: '15:00'
+      time: "15:00"
       day: monday
