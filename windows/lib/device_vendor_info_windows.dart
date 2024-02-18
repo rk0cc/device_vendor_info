@@ -4,4 +4,4 @@
 /// and this library **ONLY** grant for **READ** access.
 library device_vendor_info_windows;
 
-export 'src/loader.dart';
+export 'src/loader.dart' show WindowsDeviceVendorInfoLoader;
