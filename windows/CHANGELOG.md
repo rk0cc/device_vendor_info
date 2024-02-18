@@ -1,3 +1,7 @@
+## 1.0.0-beta.1
+
+* Deploy v2 interface layout.
+
 ## 0.2.0
 
 * Update interface constraint.
