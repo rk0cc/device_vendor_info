@@ -6,6 +6,9 @@ import 'package:device_vendor_info/testing.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  setUpAll(() {
+    overrideCorrectTargetPlatform();
+  });
   test("Forbid using real loader during test", () {
     expect(() => DeviceVendorInfo.instance = null, throwsUnsupportedError);
   });

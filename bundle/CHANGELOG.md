@@ -1,3 +1,7 @@
+## 1.0.0-beta.1
+
+* New interface implementations.
+
 ## 0.2.0
 
 * Move `DeviceVendorInfo` class under `instance.dart` libarary.

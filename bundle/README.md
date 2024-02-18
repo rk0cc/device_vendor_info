@@ -33,7 +33,7 @@ Future<void> main() async {
 
 ### Testing
 
-To run testes with `DeviceVendorInfo`, attaching `MockDeviceVendorInfoLoader` into `DeviceVendorInfo.instance` is requried otherwise the incoming testes will throws `UnsepportedError` immediately.
+To run testes with `DeviceVendorInfo`, `overrideCorrectTargetPlatform` must be invoked in `setUpAll` before all testes. Then, attach `MockDeviceVendorInfoLoader` into `DeviceVendorInfo.instance`. Otherwise the incoming testes will throws `UnsupportedError` immediately.
 
 ```dart
 // Specify testing platform to prevent causing test failed when running on unsupport platform accidentally.
@@ -46,6 +46,9 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
     setupAll(() {
+        // Call it first
+        overrideCorrectTargetPlatform();
+
         // Change the instance to mock loader instead of automatically uses produtive loader.
         DeviceVendorInfo.instance = MockDeviceVendorInfoLoader(
           BiosInfo(vendor: "Generic vendor", version: "v1.23", releaseDate: DateTime(2023, 2, 21)),
