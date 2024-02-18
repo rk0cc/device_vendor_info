@@ -5,9 +5,14 @@ import 'package:device_vendor_info_interface/release.dart'
 import 'package:meta/meta.dart';
 import 'package:path/path.dart' as p;
 
+/// UNIX implementation of [DeviceVendorInfoDictionary].
 @internal
 final class UnixDeviceVendorInfoDictionary
     implements DeviceVendorInfoDictionary {
+  /// Constructor of [UnixDeviceVendorInfoDictionary].
+  ///
+  /// It only valid when running in UNIX. Otherwise, the assertion
+  /// failed.
   UnixDeviceVendorInfoDictionary()
       : assert(Platform.isMacOS || Platform.isLinux);
 
@@ -77,6 +82,15 @@ final class UnixDeviceVendorInfoDictionary
   Stream<String> get values => entries.map((event) => event.value);
 }
 
+/// Categorize DMI file structure found in UNIX implementation of
+/// [DeviceVendorInfoDictionary].
+///
+/// The structure of [DeviceVendorInfoDictionary.keys] are formed as
+/// `<types>_<names>` that allowing to categorize which hardware types
+/// and names can be fetched.
+///
+/// When [types] and [names] calles in non-UNIX platform, it will returns
+/// an empty [String].
 extension UnixDeviceVendorInfoDictionaryExtension
     on DeviceVendorInfoDictionary {
   Stream<(String, String)> _keyStruct() {
@@ -91,9 +105,13 @@ extension UnixDeviceVendorInfoDictionaryExtension
     return const Stream.empty(broadcast: false);
   }
 
+  /// Get available hardware types can be found in hardware.
   Future<Set<String>> get types =>
       _keyStruct().map((event) => event.$1).toSet().then(Set.unmodifiable);
 
+  /// Get available names of [types].
+  ///
+  /// The provided names may not applied as a pair with [types].
   Future<Set<String>> get names =>
       _keyStruct().map((event) => event.$2).toSet().then(Set.unmodifiable);
 }

@@ -4,11 +4,15 @@ import 'package:device_vendor_info_interface/definitions.dart';
 import 'package:device_vendor_info_interface/interface.dart';
 import 'package:device_vendor_info_interface/release.dart';
 
-import 'dictionary.dart';
+import 'dictionary.dart' hide UnixDeviceVendorInfoDictionaryExtension;
 
 /// UNIX based [DeviceVendorInfoLoader] for getting hardware information.
 final class UnixDeviceVendorInfoLoader
     extends ProductiveDeviceVendorInfoLoader {
+  /// Get all value if supported Desktop Management Interface (DMI).
+  ///
+  /// The corresponded entities will be stored  `/sys/class/dmi/id/`
+  /// and extract them (not include subdirectories).
   @override
   late final DeviceVendorInfoDictionary dictionary;
 
@@ -29,9 +33,8 @@ final class UnixDeviceVendorInfoLoader
     return BiosInfo(
         vendor: await dictionary["bios_vendor"],
         version: await dictionary["bios_version"],
-        releaseDate: releaseDate == null
-            ? null
-            : biosDateFormat.parse(releaseDate));
+        releaseDate:
+            releaseDate == null ? null : biosDateFormat.parse(releaseDate));
   }
 
   @override
