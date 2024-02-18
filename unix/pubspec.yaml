@@ -1,6 +1,6 @@
 name: device_vendor_info_unix
 description: UNIX (including macOS and Linux) implementation of hardware vendor information in Flutter.
-version: 0.2.0
+version: 1.0.0-beta.1
 homepage: https://github.com/rk0cc/device_vendor_info
 repository: https://github.com/rk0cc/device_vendor_info/tree/main/unix
 environment: 
@@ -10,7 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
   meta: ^1.10.0
-  device_vendor_info_interface: ^1.1.0
+  device_vendor_info_interface: ^2.0.0
   async: ^2.11.0
   path: ^1.8.3
 dev_dependencies:

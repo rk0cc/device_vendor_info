@@ -1,51 +1,55 @@
 import 'dart:io';
 
-import 'package:async/async.dart';
-import 'package:device_vendor_info_interface/definitions.dart' as dvi_def;
+import 'package:device_vendor_info_interface/definitions.dart';
 import 'package:device_vendor_info_interface/interface.dart';
+import 'package:device_vendor_info_interface/release.dart';
 
-import 'dmi.dart';
+import 'dictionary.dart';
 
 /// UNIX based [DeviceVendorInfoLoader] for getting hardware information.
-final class UnixDeviceVendorInfoLoader implements DeviceVendorInfoLoader {
-  final AsyncMemoizer<BiosInfo> _biosInfo = AsyncMemoizer();
-  final AsyncMemoizer<BoardInfo> _boardInfo = AsyncMemoizer();
-  final AsyncMemoizer<SystemInfo> _systemInfo = AsyncMemoizer();
-
-  late final DmiDirectoryReader _dmiDir;
+final class UnixDeviceVendorInfoLoader
+    extends ProductiveDeviceVendorInfoLoader {
+  @override
+  late final DeviceVendorInfoDictionary dictionary;
 
   /// Construct new instance for fetching hardward information.
-  UnixDeviceVendorInfoLoader() : assert(Platform.isLinux || Platform.isMacOS) {
-    if (Platform.environment.containsKey("FLUTTER_TEST")) {
+  UnixDeviceVendorInfoLoader() {
+    if (!Platform.isLinux && !Platform.isMacOS) {
       throw UnsupportedError(
-          "Using real information to perform test is forbidden.");
+          "This loader is for UNIX platform (e.g. macOS, Linux) only");
     }
-    _dmiDir = const DmiDirectoryReader();
+
+    dictionary = UnixDeviceVendorInfoDictionary();
   }
 
   @override
-  Future<BiosInfo> get biosInfo => _biosInfo.runOnce(() async {
-        String? releaseDate = await _dmiDir[(DmiCategory.bios, "date")];
+  Future<BiosInfo> fetchBiosInfo(DeviceVendorInfoDictionary dictionary) async {
+    String? releaseDate = await dictionary["bios_date"];
 
-        return BiosInfo(
-            vendor: await _dmiDir[(DmiCategory.bios, "vendor")],
-            version: await _dmiDir[(DmiCategory.bios, "version")],
-            releaseDate: releaseDate == null
-                ? null
-                : dvi_def.biosDateFormat.parse(releaseDate));
-      });
-
-  @override
-  Future<BoardInfo> get boardInfo => _boardInfo.runOnce(() async => BoardInfo(
-      manufacturer: await _dmiDir[(DmiCategory.board, "vendor")],
-      productName: await _dmiDir[(DmiCategory.board, "name")],
-      version: await _dmiDir[(DmiCategory.board, "version")]));
+    return BiosInfo(
+        vendor: await dictionary["bios_vendor"],
+        version: await dictionary["bios_version"],
+        releaseDate: releaseDate == null
+            ? null
+            : biosDateFormat.parse(releaseDate));
+  }
 
   @override
-  Future<SystemInfo> get systemInfo =>
-      _systemInfo.runOnce(() async => SystemInfo(
-          family: await _dmiDir[(DmiCategory.product, "family")],
-          manufacturer: await _dmiDir["sys_vendor"],
-          productName: await _dmiDir[(DmiCategory.product, "name")],
-          version: await _dmiDir[(DmiCategory.product, "version")]));
+  Future<BoardInfo> fetchBoardInfo(
+      DeviceVendorInfoDictionary dictionary) async {
+    return BoardInfo(
+        manufacturer: await dictionary["board_vendor"],
+        productName: await dictionary["board_name"],
+        version: await dictionary["board_version"]);
+  }
+
+  @override
+  Future<SystemInfo> fetchSystemInfo(
+      DeviceVendorInfoDictionary dictionary) async {
+    return SystemInfo(
+        family: await dictionary["product_family"],
+        manufacturer: await dictionary["sys_vendor"],
+        productName: await dictionary["product_name"],
+        version: await dictionary["product_version"]);
+  }
 }
