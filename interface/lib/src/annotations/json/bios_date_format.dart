@@ -2,7 +2,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:meta/meta.dart';
 
 import '../../info/bios.dart';
-import '../../definitions.dart';
+import '../../definitions/bios_dateformat.dart';
 
 /// Define conversion format of [DateTime] field for parsing
 /// [BiosInfo.releaseDate].

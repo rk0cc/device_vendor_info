@@ -1,3 +1,9 @@
+## 2.0.0
+
+* `DeviceVendorInfoLoader` marked as `abstract final` class that extending or implementing it directly is forbidden.
+    * Instead, uses `ProductiveDeviceVendorInfoLoader` for platform implementation or `MockDeviceVendorInfoLoader` for testing environment.
+* Add `DeviceVendorInfoDictionary` inside of `ProductiveDeviceVendorInfoLoader` for getting raw value from platform.
+
 ## 1.1.0
 
 * Add `toJson` for retrive information in JSON format
