@@ -30,7 +30,7 @@ Future<Map<String, dynamic>> exportVendorInfoToJson() async =>
 
 /// Return original hardware metadata into [String]-[String] JSON
 /// format.
-Future<Map<String, String>> exportRawVendorInfoToJson() async {
+Future<Map<String, Object>> exportRawVendorInfoToJson() async {
   final DeviceVendorInfoLoader loader = DeviceVendorInfo.instance;
 
   if (loader is ProductiveDeviceVendorInfoLoader) {

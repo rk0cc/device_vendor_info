@@ -12,15 +12,23 @@ final class DeviceVendorInfo {
 
   const DeviceVendorInfo._();
 
-  static DeviceVendorInfoLoader get _releaseLoader =>
-      switch (defaultTargetPlatform) {
-        TargetPlatform.linux ||
-        TargetPlatform.macOS =>
-          UnixDeviceVendorInfoLoader(),
-        TargetPlatform.windows => WindowsDeviceVendorInfoLoader(),
-        _ =>
-          throw UnsupportedError("Unable to get loader for unsupported system")
-      };
+  static DeviceVendorInfoLoader get _releaseLoader {
+    Never unexpectedPlatform() {
+      throw UnsupportedError("Unable to get loader for unsupported system");
+    }
+
+    if (kIsWeb) {
+      unexpectedPlatform();
+    }
+
+    return switch (defaultTargetPlatform) {
+      TargetPlatform.linux ||
+      TargetPlatform.macOS =>
+        UnixDeviceVendorInfoLoader(),
+      TargetPlatform.windows => WindowsDeviceVendorInfoLoader(),
+      _ => unexpectedPlatform()
+    };
+  }
 
   /// Get current instance for fetching hardware information.
   ///

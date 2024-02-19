@@ -1,3 +1,7 @@
+## 2.1.0
+
+* `DeviceVendorInfoDictionary` values becomes `Object` type to determine
+
 ## 2.0.0
 
 * `DeviceVendorInfoLoader` marked as `abstract final` class that extending or implementing it directly is forbidden.
