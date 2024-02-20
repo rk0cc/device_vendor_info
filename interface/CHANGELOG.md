@@ -1,6 +1,13 @@
-## 2.1.0
+## 3.0.0
 
-* `DeviceVendorInfoDictionary` values becomes `Object` type to determine
+* `DeviceVendorInfoDictionary` values becomes `Object`
+* Added `TypedDeviceVendorInfoDictionary` for specifed values types returned from dictionary.
+* Added `EntryBasedDeviceVendorInfoDictionary` to deploy new `DeviceVendorInfoDictionary` by implementing `entries` only.
+* Provides additional methods of `DeviceVendorInfoDictionary` which distributed via extension:
+    * `castValues`
+    * `map`
+    * `where`
+    * `whereTypeOfValues`
 
 ## 2.0.0
 

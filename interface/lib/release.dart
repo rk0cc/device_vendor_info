@@ -2,5 +2,5 @@
 /// during release.
 library release;
 
-export 'src/dictionary.dart';
+export 'src/dictionary.dart' hide StringifiedValuesDeviceVendorInfoDictionary;
 export 'src/loader.dart' show ProductiveDeviceVendorInfoLoader;
