@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:meta/meta.dart';
+
 /// Emulated [String]-[String] key-value pair object for accessing entities of
 /// hardware information.
 ///
@@ -35,6 +37,12 @@ abstract interface class DeviceVendorInfoDictionary {
 
   /// Apply [action] for each pairs.
   Future<void> forEach(void Function(String key, Object value) action);
+
+  TypedDeviceVendorInfoDictionary<V> map<V extends Object>(
+      MapEntry<String, V> Function(MapEntry<String, Object> entry) convert);
+
+  DeviceVendorInfoDictionary where(
+      bool Function(MapEntry<String, Object> entry) condition);
 
   /// Return value which paired with [key].
   ///
@@ -74,6 +82,18 @@ abstract base mixin class EntryBasedDeviceVendorInfoDictionary
   }
 
   @override
+  TypedDeviceVendorInfoDictionary<V> map<V extends Object>(
+      MapEntry<String, V> Function(MapEntry<String, Object> entry) convert) {
+    return DelegatedDeviceVendorInfoDictionary(entries.map(convert));
+  }
+
+  @override
+  DeviceVendorInfoDictionary where(
+      bool Function(MapEntry<String, Object> entry) condition) {
+    return DelegatedDeviceVendorInfoDictionary(entries.where(condition));
+  }
+
+  @override
   Future<bool> get isEmpty => entries.isEmpty;
 
   @override
@@ -89,26 +109,61 @@ abstract base mixin class EntryBasedDeviceVendorInfoDictionary
   Stream<Object> get values => entries.map((event) => event.value);
 }
 
-abstract final class CastedDeviceVendorInfoDictionary<V extends Object>
+abstract final class TypedDeviceVendorInfoDictionary<V extends Object>
     implements DeviceVendorInfoDictionary {
-  const CastedDeviceVendorInfoDictionary._();
+  const TypedDeviceVendorInfoDictionary._();
 
+  @mustBeOverridden
   @override
   Future<V?> operator [](String key);
 
+  @mustBeOverridden
   @override
   Stream<MapEntry<String, V>> get entries;
 
+  @mustBeOverridden
   @override
   Stream<V> get values;
 }
 
+@doNotStore
+@optionalTypeArgs
+final class DelegatedDeviceVendorInfoDictionary<V extends Object>
+    extends EntryBasedDeviceVendorInfoDictionary
+    implements TypedDeviceVendorInfoDictionary<V> {
+  @override
+  final Stream<MapEntry<String, V>> entries;
+
+  DelegatedDeviceVendorInfoDictionary(this.entries);
+
+  @override
+  Future<V?> operator [](String key) async {
+    try {
+      return await entries
+          .singleWhere((element) => element.key == key)
+          .then((value) => value.value);
+    } on StateError {
+      return null;
+    }
+  }
+
+  @override
+  Stream<V> get values => entries.map((event) => event.value);
+}
+
 final class _ValueTypeCastedDeviceVendorInfoDictionary<V extends Object>
     extends EntryBasedDeviceVendorInfoDictionary
-    implements CastedDeviceVendorInfoDictionary<V> {
+    implements TypedDeviceVendorInfoDictionary<V> {
   final DeviceVendorInfoDictionary _original;
 
-  _ValueTypeCastedDeviceVendorInfoDictionary(this._original);
+  _ValueTypeCastedDeviceVendorInfoDictionary._(this._original);
+
+  factory _ValueTypeCastedDeviceVendorInfoDictionary(
+          DeviceVendorInfoDictionary original) =>
+      _ValueTypeCastedDeviceVendorInfoDictionary._(
+          original is _ValueTypeCastedDeviceVendorInfoDictionary
+              ? original._original
+              : original);
 
   @override
   Future<V?> operator [](String key) async {
@@ -124,9 +179,7 @@ final class _ValueTypeCastedDeviceVendorInfoDictionary<V extends Object>
   @override
   Stream<MapEntry<String, V>> get entries async* {
     await for (var kv in _original.entries) {
-      if (kv.value is V) {
-        yield MapEntry(kv.key, kv.value as V);
-      }
+      yield MapEntry(kv.key, kv.value as V);
     }
   }
 
@@ -146,6 +199,11 @@ extension DeviceVendorInfoDictionaryMapConversion
 
 extension DeviceVendorInfoDictionaryTypesExtension
     on DeviceVendorInfoDictionary {
-  CastedDeviceVendorInfoDictionary<V> castValues<V extends Object>() =>
+  TypedDeviceVendorInfoDictionary<V> castValue<V extends Object>() =>
       _ValueTypeCastedDeviceVendorInfoDictionary<V>(this);
+
+  TypedDeviceVendorInfoDictionary<V> whereValueType<V extends Object>() =>
+      DelegatedDeviceVendorInfoDictionary(entries
+          .where((event) => event.value is V)
+          .cast<MapEntry<String, V>>());
 }
