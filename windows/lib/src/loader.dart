@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:device_vendor_info_interface/definitions.dart';
 import 'package:device_vendor_info_interface/interface.dart';
 import 'package:device_vendor_info_interface/release.dart';
@@ -17,24 +15,19 @@ final class WindowsDeviceVendorInfoLoader
   /// `HKEY_LOCALE_MACHINE\HARDWARE\DESCRIPTION\System\BIOS`
   /// and extract them (not include subdirectories).
   @override
-  late final DeviceVendorInfoDictionary dictionary;
+  final DeviceVendorInfoDictionary dictionary;
 
   /// Create new instance for fetching hardward information.
-  WindowsDeviceVendorInfoLoader() {
-    if (!Platform.isWindows) {
-      throw UnsupportedError("This loader only works in Windows.");
-    }
-
-    dictionary = WindowsDeviceVendorInfoDictionary();
-  }
+  WindowsDeviceVendorInfoLoader()
+      : dictionary = WindowsDeviceVendorInfoDictionary();
 
   @override
   Future<BiosInfo> fetchBiosInfo(DeviceVendorInfoDictionary dictionary) async {
-    String? releaseDateString = await dictionary["BIOSReleaseDate"];
+    String? releaseDateString = await dictionary["BIOSReleaseDate"] as String?;
 
     return BiosInfo(
-        vendor: await dictionary["BIOSVendor"],
-        version: await dictionary["BIOSVersion"],
+        vendor: "${await dictionary["BIOSVendor"]}",
+        version: "${await dictionary["BIOSVersion"]}",
         releaseDate: releaseDateString == null
             ? null
             : biosDateFormat.parse(releaseDateString));
@@ -44,18 +37,18 @@ final class WindowsDeviceVendorInfoLoader
   Future<BoardInfo> fetchBoardInfo(
       DeviceVendorInfoDictionary dictionary) async {
     return BoardInfo(
-        manufacturer: await dictionary["BaseBoardManufacturer"],
-        productName: await dictionary["BaseBoardProduct"],
-        version: await dictionary["BaseBoardVersion"]);
+        manufacturer: "${await dictionary["BaseBoardManufacturer"]}",
+        productName: "${await dictionary["BaseBoardProduct"]}",
+        version: "${await dictionary["BaseBoardVersion"]}");
   }
 
   @override
   Future<SystemInfo> fetchSystemInfo(
       DeviceVendorInfoDictionary dictionary) async {
     return SystemInfo(
-        family: await dictionary["SystemFamily"],
-        manufacturer: await dictionary["SystemManufacturer"],
-        productName: await dictionary["SystemProductName"],
-        version: await dictionary["SystemVersion"]);
+        family: "${await dictionary["SystemFamily"]}",
+        manufacturer: "${await dictionary["SystemManufacturer"]}",
+        productName: "${await dictionary["SystemProductName"]}",
+        version: "${await dictionary["SystemVersion"]}");
   }
 }

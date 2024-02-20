@@ -1,3 +1,8 @@
+## 1.0.0-beta.2
+
+* Upgrade to v3 interface.
+* Dictionary values uses `Object` rather than `String`.
+
 ## 1.0.0-beta.1
 
 * Deploy v2 interface layout.

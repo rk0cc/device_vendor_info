@@ -2,19 +2,23 @@ import 'dart:io';
 import 'dart:isolate';
 
 import 'package:device_vendor_info_interface/release.dart'
-    show DeviceVendorInfoDictionary;
+    show DeviceVendorInfoDictionary, EntryBasedDeviceVendorInfoDictionary;
 import 'package:meta/meta.dart';
 import 'package:win32_registry/win32_registry.dart';
 
 /// Windows implementation of [DeviceVendorInfoDictionary].
 @internal
 final class WindowsDeviceVendorInfoDictionary
-    implements DeviceVendorInfoDictionary {
+    extends EntryBasedDeviceVendorInfoDictionary {
   /// Constructor of [WindowsDeviceVendorInfoDictionary].
   ///
   /// It only valid when running in Windows. Otherwise, the assertion
   /// failed.
-  WindowsDeviceVendorInfoDictionary() : assert(Platform.isWindows);
+  WindowsDeviceVendorInfoDictionary() {
+    if (!Platform.isWindows) {
+      throw UnsupportedError("This loader only works in Windows.");
+    }
+  }
 
   Future<RegistryKey> _openRegistry() =>
       Isolate.run(() => Registry.openPath(RegistryHive.localMachine,
@@ -22,56 +26,28 @@ final class WindowsDeviceVendorInfoDictionary
           desiredAccessRights: AccessRights.readOnly));
 
   @override
-  Future<String?> operator [](String key) async {
-    try {
-      return await entries
-          .singleWhere((element) => element.key == key)
-          .then((value) => value.value);
-    } on StateError {
-      return null;
-    }
-  }
-
-  @override
-  Future<bool> containsKey(String key) {
-    return entries.any((element) => element.key == key);
-  }
-
-  @override
-  Future<bool> containsValue(String value) {
-    return entries.any((element) => element.value == value);
-  }
-
-  @override
-  Stream<MapEntry<String, String>> get entries async* {
+  Stream<MapEntry<String, Object>> get entries async* {
     RegistryKey k = await _openRegistry();
 
     try {
       for (var value in k.values) {
-        yield MapEntry(value.name, "${value.data}");
+        yield MapEntry(
+            value.name,
+            switch (value.type) {
+              RegistryValueType.int32 ||
+              RegistryValueType.int64 =>
+                value.data as int,
+              RegistryValueType.string ||
+              RegistryValueType.unexpandedString ||
+              RegistryValueType.link =>
+                value.data as String,
+              RegistryValueType.binary =>
+                List.unmodifiable([...value.data as List<int>]) as List<int>,
+              _ => ""
+            });
       }
     } finally {
       k.close();
     }
   }
-
-  @override
-  Future<void> forEach(void Function(String key, String value) action) {
-    return entries.forEach((element) => action(element.key, element.value));
-  }
-
-  @override
-  Future<bool> get isEmpty => entries.isEmpty;
-
-  @override
-  Future<bool> get isNotEmpty async => !await isEmpty;
-
-  @override
-  Stream<String> get keys => entries.map((event) => event.key);
-
-  @override
-  Future<int> get length => entries.length;
-
-  @override
-  Stream<String> get values => entries.map((event) => event.value);
 }
