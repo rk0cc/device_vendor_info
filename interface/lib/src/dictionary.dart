@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:meta/meta.dart';
 
-/// Emulated [String]-[String] key-value pair object for accessing entities of
+/// Emulated [String] key pair object for accessing entities of
 /// hardware information.
 ///
 /// This interface has similar features from unmodifiable [Map]
@@ -126,7 +126,6 @@ abstract final class TypedDeviceVendorInfoDictionary<V extends Object>
   Stream<V> get values;
 }
 
-@doNotStore
 @optionalTypeArgs
 final class DelegatedDeviceVendorInfoDictionary<V extends Object>
     extends EntryBasedDeviceVendorInfoDictionary
