@@ -27,7 +27,7 @@ final class SameNestedDictionaryTypeError<T extends DeviceVendorInfoDictionary>
     final StringBuffer buf = StringBuffer();
 
     buf
-      ..write("SameNestedDictionaryTypeError")
+      ..write("SameNestedDictionaryTypeError: ")
       ..writeln("It does not accept exact same type as nested dictionary.")
       ..writeln(_getDictionaryType());
 
