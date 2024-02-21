@@ -1,17 +1,84 @@
 import 'dart:async';
+import 'dart:io';
 
+import 'package:flutter/foundation.dart' show TargetPlatform;
 import 'package:meta/meta.dart';
 
-/// [TypeError] based that the same [DeviceVendorInfoDictionary] cannot be
-/// accepted as nested dictionary.
 @optionalTypeArgs
-final class SameNestedDictionaryTypeError<T extends DeviceVendorInfoDictionary>
-    extends TypeError {
-  SameNestedDictionaryTypeError._();
+abstract class DeviceVendorInfoDictionaryError<
+    T extends DeviceVendorInfoDictionary> extends Error {
+  final String message;
+
+  DeviceVendorInfoDictionaryError([this.message = ""]);
 
   @override
   String toString() {
-    return "$T does not accept applying same type as nested dictionary";
+    final StringBuffer buf = StringBuffer();
+
+    buf.write("DeviceVendorInfoDictionaryError");
+
+    if (message.isNotEmpty) {
+      buf
+        ..write(": ")
+        ..writeln(message);
+    }
+
+    buf
+      ..write("Dictionary type: ")
+      ..writeln(T);
+
+    return buf.toString();
+  }
+}
+
+/// [TypeError] based that the same [DeviceVendorInfoDictionary] cannot be
+/// accepted as nested dictionary.
+final class SameNestedDictionaryTypeError<T extends DeviceVendorInfoDictionary>
+    extends DeviceVendorInfoDictionaryError<T> implements TypeError {
+  SameNestedDictionaryTypeError._()
+      : super("It does not accept exact same type as nested dictionary.");
+}
+
+/// Indicate the [DeviceVendorInfoDictionary] cannot be constucted
+/// in [currentPlatform].
+class UnsupportedDictionaryPlatformException<
+    T extends DeviceVendorInfoDictionary> implements IOException {
+  /// Current [TargetPlatform] when this exception thrown.
+  final TargetPlatform currentPlatform;
+  
+  /// The eligable [TargetPlatform]s that [DeviceVendorInfoDictionary]
+  /// can be constructed.
+  final Iterable<TargetPlatform> appliedPlatform;
+
+  /// Construct [UnsupportedDictionaryPlatformException] to prevent
+  /// [DeviceVendorInfoDictionary] in unsupported platform.
+  UnsupportedDictionaryPlatformException(this.currentPlatform,
+      {bool linux = false, bool macOS = false, bool windows = false})
+      : appliedPlatform = List.unmodifiable([
+          if (linux) TargetPlatform.linux,
+          if (macOS) TargetPlatform.macOS,
+          if (windows) TargetPlatform.windows
+        ]);
+
+  @override
+  String toString() {
+    final StringBuffer buf = StringBuffer();
+
+    buf
+      ..write("UnsupportedDictionaryPlatformException: ")
+      ..write("This dictionary only support in ")
+      ..write(appliedPlatform.map((e) => e.name).join(", "))
+      ..write(". But it constructed in ")
+      ..write(currentPlatform.name)
+      ..writeln(".");
+
+    if (T != DeviceVendorInfoDictionary) {
+      buf
+        ..write("Dictionary type: ")
+        ..writeln(T);
+    }
+
+    return buf.toString();
   }
 }
 
