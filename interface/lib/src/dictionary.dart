@@ -4,18 +4,24 @@ import 'dart:io';
 import 'package:flutter/foundation.dart' show TargetPlatform;
 import 'package:meta/meta.dart';
 
+/// A generic type for extended [Error] and [Exception] related
+/// to [DeviceVendorInfoDictionary].
+/// 
+/// It should be used for making decision during try-catch blocks,
+/// and do not extend or mix this directly.
+@sealed
 @optionalTypeArgs
-abstract class DeviceVendorInfoDictionaryError<
-    T extends DeviceVendorInfoDictionary> extends Error {
-  final String message;
+abstract mixin class DeviceVendorInfoDictionaryThrowable<
+    T extends DeviceVendorInfoDictionary> {
+  const DeviceVendorInfoDictionaryThrowable._();
 
-  DeviceVendorInfoDictionaryError([this.message = ""]);
+  String get message;
 
   @override
   String toString() {
     final StringBuffer buf = StringBuffer();
 
-    buf.write("DeviceVendorInfoDictionaryError");
+    buf.write("DeviceVendorInfoDictionaryThrowable");
 
     if (message.isNotEmpty) {
       buf
@@ -34,18 +40,23 @@ abstract class DeviceVendorInfoDictionaryError<
 /// [TypeError] based that the same [DeviceVendorInfoDictionary] cannot be
 /// accepted as nested dictionary.
 final class SameNestedDictionaryTypeError<T extends DeviceVendorInfoDictionary>
-    extends DeviceVendorInfoDictionaryError<T> implements TypeError {
-  SameNestedDictionaryTypeError._()
-      : super("It does not accept exact same type as nested dictionary.");
+    extends TypeError with DeviceVendorInfoDictionaryThrowable<T> {
+  @override
+  final String message =
+      "It does not accept exact same type as nested dictionary.";
+
+  SameNestedDictionaryTypeError._();
 }
 
 /// Indicate the [DeviceVendorInfoDictionary] cannot be constucted
 /// in [currentPlatform].
 class UnsupportedDictionaryPlatformException<
-    T extends DeviceVendorInfoDictionary> implements IOException {
+        T extends DeviceVendorInfoDictionary>
+    with DeviceVendorInfoDictionaryThrowable
+    implements IOException {
   /// Current [TargetPlatform] when this exception thrown.
   final TargetPlatform currentPlatform;
-  
+
   /// The eligable [TargetPlatform]s that [DeviceVendorInfoDictionary]
   /// can be constructed.
   final Iterable<TargetPlatform> appliedPlatform;
@@ -61,16 +72,26 @@ class UnsupportedDictionaryPlatformException<
         ]);
 
   @override
-  String toString() {
+  String get message {
     final StringBuffer buf = StringBuffer();
 
     buf
-      ..write("UnsupportedDictionaryPlatformException: ")
       ..write("This dictionary only support in ")
       ..write(appliedPlatform.map((e) => e.name).join(", "))
       ..write(". But it constructed in ")
       ..write(currentPlatform.name)
       ..writeln(".");
+
+    return buf.toString();
+  }
+
+  @override
+  String toString() {
+    final StringBuffer buf = StringBuffer();
+
+    buf
+      ..write("UnsupportedDictionaryPlatformException")
+      ..write(message);
 
     if (T != DeviceVendorInfoDictionary) {
       buf
