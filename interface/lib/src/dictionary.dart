@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:math' show pow;
+import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart' show TargetPlatform;
 import 'package:meta/meta.dart';
@@ -87,6 +89,58 @@ class UnsupportedDictionaryPlatformException implements IOException {
   }
 }
 
+sealed class BytesStringNotations {
+  const BytesStringNotations();
+
+  @protected
+  String onDecoding(List<int> bytes, int bitSizes);
+}
+
+extension _BytesStringNotationsProcessor on BytesStringNotations {
+  String decodeBytes(List<int> bytes) {
+    if (bytes is! TypedData) {
+      throw TypeError();
+    }
+
+    int byteGroup = 1;
+
+    while (bytes.any((element) => element >= pow(2, byteGroup * 8))) {
+      byteGroup++;
+    }
+
+    return onDecoding(bytes, 8 * byteGroup);
+  }
+}
+
+final class HexValuesNotations extends BytesStringNotations {
+  final bool prefix;
+  final bool upperCase;
+
+  const HexValuesNotations({this.prefix = true, this.upperCase = true});
+
+  @override
+  String onDecoding(List<int> bytes, int bitSizes) {
+    final StringBuffer buf = StringBuffer();
+
+    final int hexLen = bitSizes ~/ 4;
+
+    for (int b in bytes) {
+      if (prefix) {
+        buf.write("0x");
+      }
+
+      String bInHex = b.toRadixString(16).padLeft(hexLen, '0');
+      if (upperCase) {
+        bInHex = bInHex.toUpperCase();
+      }
+
+      buf..write(bInHex)..write(" ");
+    }
+
+    return buf.toString();
+  }
+}
+
 /// Emulated [String] key pair object for accessing entities of
 /// hardware information.
 ///
@@ -101,13 +155,15 @@ abstract interface class DeviceVendorInfoDictionary {
   /// cannot reapply into [stringify] again. Otherwise, it throws
   /// [SameNestedDictionaryTypeError].
   static StringifiedValuesDeviceVendorInfoDictionary stringify(
-      DeviceVendorInfoDictionary dictionary) {
+      DeviceVendorInfoDictionary dictionary,
+      {BytesStringNotations byteToString = const HexValuesNotations()}) {
     if (dictionary is _StringifiedValuesDeviceVendorInfoDictionary) {
       throw SameNestedDictionaryTypeError<
           StringifiedValuesDeviceVendorInfoDictionary>._();
     }
 
-    return _StringifiedValuesDeviceVendorInfoDictionary(dictionary);
+    return _StringifiedValuesDeviceVendorInfoDictionary(
+        dictionary, byteToString.decodeBytes);
   }
 
   /// Counts the total pairs stored in this dictionary.
@@ -309,13 +365,29 @@ typedef StringifiedValuesDeviceVendorInfoDictionary
 final class _StringifiedValuesDeviceVendorInfoDictionary
     extends _EntryBasedTypedDeviceVendorInfoDictionary<String> {
   final DeviceVendorInfoDictionary _origin;
+  final String Function(List<int> bytes) _byteConverter;
 
-  _StringifiedValuesDeviceVendorInfoDictionary(this._origin)
+  _StringifiedValuesDeviceVendorInfoDictionary(
+      this._origin, this._byteConverter)
       : assert(_origin is! _StringifiedValuesDeviceVendorInfoDictionary);
 
   @override
-  Stream<MapEntry<String, String>> get entries =>
-      _origin.entries.map((event) => MapEntry(event.key, "${event.value}"));
+  Stream<MapEntry<String, String>> get entries => _origin.entries.map((event) {
+        var v = event.value;
+        late String vStr;
+
+        if (v is List<int>) {
+          if (v is TypedData) {
+            vStr = _byteConverter(v);
+          } else {
+            vStr = "$v";
+          }
+        } else {
+          vStr = "$v";
+        }
+
+        return MapEntry(event.key, vStr);
+      });
 }
 
 /// Additional features for converting [DeviceVendorInfoDictionary]

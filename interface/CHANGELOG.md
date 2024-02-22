@@ -1,3 +1,7 @@
+## 3.1.0
+
+* Define new exceptions for creating unsupported platform in `DeviceVendorInfoDictionary`.
+
 ## 3.0.0
 
 * `DeviceVendorInfoDictionary` values becomes `Object`
