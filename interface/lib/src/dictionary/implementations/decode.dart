@@ -2,6 +2,9 @@ part of '../../dictionary.dart';
 
 typedef _EncodingDecoder = Converter<List<int>, String>;
 
+/// Extract all [values] store as [TypedData] in a [List] of
+/// [int] (e.g. [Uint8List]) and uses [Encoding.decoder]
+/// to convert actual content in [String].
 final class DecodedBytesValueDeviceVendorInfoDictionary
     extends EntryBasedTypedDeviceVendorInfoDictionary<String> {
   final TypedDeviceVendorInfoDictionary<List<int>> _origin;

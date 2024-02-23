@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:isolate';
+import 'dart:math' as math show max, pow;
 import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart' show TargetPlatform;
