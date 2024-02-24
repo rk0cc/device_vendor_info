@@ -13,8 +13,11 @@ final class UnixDeviceVendorInfoDictionary
   ///
   /// It only valid when running in UNIX. Otherwise, the assertion
   /// failed.
-  UnixDeviceVendorInfoDictionary()
-      : assert(Platform.isMacOS || Platform.isLinux);
+  UnixDeviceVendorInfoDictionary() {
+    if (!Platform.isMacOS && !Platform.isLinux) {
+      
+    }
+  }
 
   @override
   Future<String?> operator [](String key) async {
