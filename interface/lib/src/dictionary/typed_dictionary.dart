@@ -23,8 +23,7 @@ abstract interface class TypedDeviceVendorInfoDictionary<V extends Object>
   Future<void> forEach(void Function(String key, V value) action);
 }
 
-abstract mixin class EntryBasedTypedDeviceVendorInfoDictionary<
-        V extends Object>
+abstract mixin class EntryBasedTypedDeviceVendorInfoDictionary<V extends Object>
     implements
         TypedDeviceVendorInfoDictionary<V>,
         EntryBasedDeviceVendorInfoDictionary {

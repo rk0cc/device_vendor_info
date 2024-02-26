@@ -14,9 +14,15 @@ dependencies:
   intl: '>=0.18.0 <1.0.0'
   async: ^2.11.0
 dev_dependencies:
+  flutter_test:
+    sdk: flutter
   flutter_lints: ^3.0.1
   build_runner: ^2.4.8
   json_serializable: ^6.7.1
+  enough_convert:
+    git:
+      url: https://github.com/rk0cc/enough_convert.git
+      ref: 99b2e6b8477ab2a1af5731501156f2d5a98c4188
 platforms:
   linux:
   macos:

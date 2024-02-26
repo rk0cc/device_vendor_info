@@ -14,9 +14,7 @@ final class UnixDeviceVendorInfoDictionary
   /// It only valid when running in UNIX. Otherwise, the assertion
   /// failed.
   UnixDeviceVendorInfoDictionary() {
-    if (!Platform.isMacOS && !Platform.isLinux) {
-      
-    }
+    if (!Platform.isMacOS && !Platform.isLinux) {}
   }
 
   @override

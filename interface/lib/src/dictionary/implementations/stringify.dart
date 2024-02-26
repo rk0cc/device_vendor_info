@@ -1,54 +1,88 @@
 part of '../../dictionary.dart';
 
-/// Determine the display format for each bytes notated in [int].
-enum BytesDisplayFormat {
-  dec(10),
-  hex(16);
+/// Determine applied rules when stringifying [TypedData] as a [List]
+/// of [int] form.
+enum BytesStringify {
+  /// Display decimal number with spaced between byte value.
+  dec(_RadixBytesStringifier(10)),
 
-  final int radix;
+  /// Display hexadecimal with `0x` as prefix.
+  ///
+  /// When the convered bytes is negative, the negative sign will
+  /// be appeared at first (e.g. `-0xA`).
+  hex(_HexBytesStringifier());
 
-  const BytesDisplayFormat(this.radix);
+  final _BytesStringifier _stringifier;
+
+  /// Apply stringify rules with stringifier.
+  const BytesStringify(this._stringifier);
 }
 
-extension on BytesDisplayFormat {
-  String format(List<int> bytes) {
-    Iterable<String> formatted =
-        bytes.map((e) => e.toRadixString(radix).toUpperCase());
+sealed class _BytesStringifier {
+  const _BytesStringifier();
 
-    switch (this) {
-      case BytesDisplayFormat.hex:
-        final int maxBytes = bytes.reduce(math.max);
-        int byteHexGroupLength = 1;
+  String stringify(List<int> bytes);
+}
 
-        while (maxBytes >= math.pow(16, byteHexGroupLength)) {
-          byteHexGroupLength *= 2;
-        }
+final class _RadixBytesStringifier extends _BytesStringifier {
+  final int radix;
 
-        formatted = formatted.map((e) => e.padLeft(byteHexGroupLength));
-        break;
-      default:
-        break;
+  const _RadixBytesStringifier(this.radix);
+
+  @mustCallSuper
+  @protected
+  String stringifyByte(int byte, int maxMag) {
+    return byte.toRadixString(radix);
+  }
+
+  @nonVirtual
+  @override
+  String stringify(List<int> bytes) {
+    final int maxMag = bytes.map((e) => e.abs()).reduce(math.max);
+
+    return bytes.map((e) => stringifyByte(e, maxMag).toUpperCase()).join(" ");
+  }
+}
+
+final class _HexBytesStringifier extends _RadixBytesStringifier {
+  const _HexBytesStringifier() : super(16);
+
+  @override
+  String stringifyByte(int byte, int maxMag) {
+    int binLength = 4;
+    while (maxMag >= math.pow(2, binLength)) {
+      binLength *= 2;
     }
 
-    return formatted.join(" ");
+    final String result =
+        super.stringifyByte(byte, maxMag).replaceFirst(r"-", "");
+
+    final StringBuffer buf = StringBuffer();
+
+    if (byte < 0) {
+      buf.write("-");
+    }
+
+    buf
+      ..write("0x")
+      ..write(result.padLeft(binLength ~/ 4, "0"));
+
+    return buf.toString();
   }
 }
 
 final class _StringifiedValuesDeviceVendorInfoDictionary
     extends EntryBasedTypedDeviceVendorInfoDictionary<String> {
   final DeviceVendorInfoDictionary _origin;
-  final BytesDisplayFormat bytesFormat;
+  final BytesStringify bytesStringify;
 
-  _StringifiedValuesDeviceVendorInfoDictionary(this._origin, this.bytesFormat)
+  _StringifiedValuesDeviceVendorInfoDictionary(
+      this._origin, this.bytesStringify)
       : assert(_origin is! _StringifiedValuesDeviceVendorInfoDictionary);
 
   String _handleIntList(List<int> intList) {
     if (intList is TypedData) {
-      final String typeName =
-          RegExp(r"(?:(?:u?int)|float)(?:8|16|32|64)", caseSensitive: false)
-              .firstMatch("${intList.runtimeType}")![0]!;
-
-      return "$typeName<${bytesFormat.format(intList)}>";
+      return bytesStringify._stringifier.stringify(intList);
     }
 
     return "$intList";

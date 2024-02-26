@@ -28,11 +28,11 @@ final class UnixDeviceVendorInfoLoader
 
   @override
   Future<BiosInfo> fetchBiosInfo(DeviceVendorInfoDictionary dictionary) async {
-    String? releaseDate = await dictionary["bios_date"];
+    String? releaseDate = await dictionary["bios_date"] as String?;
 
     return BiosInfo(
-        vendor: await dictionary["bios_vendor"],
-        version: await dictionary["bios_version"],
+        vendor: await dictionary["bios_vendor"] as String?,
+        version: await dictionary["bios_version"] as String?,
         releaseDate:
             releaseDate == null ? null : biosDateFormat.parse(releaseDate));
   }
@@ -41,18 +41,18 @@ final class UnixDeviceVendorInfoLoader
   Future<BoardInfo> fetchBoardInfo(
       DeviceVendorInfoDictionary dictionary) async {
     return BoardInfo(
-        manufacturer: await dictionary["board_vendor"],
-        productName: await dictionary["board_name"],
-        version: await dictionary["board_version"]);
+        manufacturer: await dictionary["board_vendor"] as String?,
+        productName: await dictionary["board_name"] as String?,
+        version: await dictionary["board_version"] as String?);
   }
 
   @override
   Future<SystemInfo> fetchSystemInfo(
       DeviceVendorInfoDictionary dictionary) async {
     return SystemInfo(
-        family: await dictionary["product_family"],
-        manufacturer: await dictionary["sys_vendor"],
-        productName: await dictionary["product_name"],
-        version: await dictionary["product_version"]);
+        family: await dictionary["product_family"] as String?,
+        manufacturer: await dictionary["sys_vendor"] as String?,
+        productName: await dictionary["product_name"] as String?,
+        version: await dictionary["product_version"] as String?);
   }
 }

@@ -9,12 +9,12 @@ part of '../dictionary.dart';
 abstract interface class DeviceVendorInfoDictionary {
   /// Wrap [DeviceVendorInfoDictionary] to notate [values] as
   /// [String].
-  /// 
-  /// When handling [values] in a [List] of [int], if the type
-  /// also implemented with [TypedData], it converts all elements
-  /// into [String] reffering [bytesFormat]. To extract decoded
-  /// information, please uses [DecodedBytesValueDeviceVendorInfoDictionary]
-  /// insteaded.
+  ///
+  /// Normally, every [values] will be converted to [String] via
+  /// [Object.toString]. Unless when handling a [List] of [int]
+  /// with [TypedData] implemented, which denoted as bytes data that
+  /// it will converted depending on current setting
+  /// of [BytesStringify].
   ///
   /// This method should be call once, and the returned dictionary
   /// cannot reapply into [stringify] again. Otherwise, it throws
@@ -22,14 +22,14 @@ abstract interface class DeviceVendorInfoDictionary {
   @factory
   static StringifiedValuesDeviceVendorInfoDictionary stringify(
       DeviceVendorInfoDictionary dictionary,
-      {BytesDisplayFormat bytesFormat = BytesDisplayFormat.hex}) {
+      {BytesStringify bytesStringify = BytesStringify.hex}) {
     if (dictionary is _StringifiedValuesDeviceVendorInfoDictionary) {
       throw SameNestedDictionaryTypeError<
           StringifiedValuesDeviceVendorInfoDictionary>._();
     }
 
     return _StringifiedValuesDeviceVendorInfoDictionary(
-        dictionary, bytesFormat);
+        dictionary, bytesStringify);
   }
 
   /// Counts the total pairs stored in this dictionary.
