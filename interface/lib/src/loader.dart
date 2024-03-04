@@ -10,7 +10,7 @@ import 'package:meta/meta.dart';
 import 'info/bios.dart';
 import 'info/board.dart';
 import 'info/system.dart';
-import 'dictionary.dart' hide DeviceVendorInfoDictionaryMapConversion;
+import 'dictionary.dart';
 
 /// A barebone loader for finding [BiosInfo] and [SystemInfo]
 /// in specific system.
