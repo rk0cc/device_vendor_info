@@ -31,8 +31,8 @@ abstract final class VendorDictionaryCollection<V>
   /// Create [VendorDictionaryCollection] with applied [generator]
   /// during [listen].
   factory VendorDictionaryCollection(
-          Stream<DictionaryEntry<V>> Function() generator, {bool primitiveTypeOnly}) =
-      _InstantVendorDictionaryCollection;
+      Stream<DictionaryEntry<V>> Function() generator,
+      {bool primitiveTypeOnly}) = _InstantVendorDictionaryCollection;
 
   Stream<DictionaryEntry<V>> Function() get _generator;
 

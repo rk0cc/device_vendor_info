@@ -42,7 +42,7 @@ abstract base class SyncedVendorDictionaryBase<V>
       return entries.singleWhere((element) => element.key == key).value;
     } on StateError {
       throw UndefinedDictionaryKeyError(key);
-    }    
+    }
   }
 
   @mustBeOverridden

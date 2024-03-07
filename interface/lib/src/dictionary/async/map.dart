@@ -18,11 +18,14 @@ final class _VendorDictionaryCollectionMapper<SV, RV>
 }
 
 @internal
-final class MapVendorDictionaryCollection<SV, RV> extends VendorDictionaryBase<RV> {
+final class MapVendorDictionaryCollection<SV, RV>
+    extends VendorDictionaryBase<RV> {
   final _VendorDictionaryCollectionMapper<SV, RV> _entries;
 
-  MapVendorDictionaryCollection(VendorDictionary<SV> dictionary, DictionaryEntry<RV> Function(String key, SV value) convert)
-    : _entries = _VendorDictionaryCollectionMapper(dictionary.entries, convert);
+  MapVendorDictionaryCollection(VendorDictionary<SV> dictionary,
+      DictionaryEntry<RV> Function(String key, SV value) convert)
+      : _entries =
+            _VendorDictionaryCollectionMapper(dictionary.entries, convert);
 
   @override
   VendorDictionaryCollection<RV> get entries => _entries;

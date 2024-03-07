@@ -156,7 +156,7 @@ final class UndefinedDictionaryKeyError extends InvalidDictionaryOperationError
   final Null invalidValue = null;
 
   /// Parameter name.
-  /// 
+  ///
   /// If thrown from [VendorDictionary] and [SyncedVendorDictionary],
   /// it should be `key`.
   @override
@@ -170,7 +170,8 @@ final class UndefinedDictionaryKeyError extends InvalidDictionaryOperationError
 
   /// Consturct [UndefinedDictionaryKeyError] with parameter [name]
   /// and [message].
-  UndefinedDictionaryKeyError(this.key, {this.name = "key", this.message = ""}) : super._();
+  UndefinedDictionaryKeyError(this.key, {this.name = "key", this.message = ""})
+      : super._();
 
   @override
   String toString() {

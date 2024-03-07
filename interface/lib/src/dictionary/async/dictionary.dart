@@ -99,7 +99,8 @@ abstract base class VendorDictionaryBase<V> implements VendorDictionary<V> {
   }
 
   @override
-  VendorDictionary<RV> map<RV>(DictionaryEntry<RV> Function(String key, V value) convert) {
+  VendorDictionary<RV> map<RV>(
+      DictionaryEntry<RV> Function(String key, V value) convert) {
     return MapVendorDictionaryCollection<V, RV>(this, convert);
   }
 

@@ -7,6 +7,4 @@ import 'package:enough_convert/big5.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:meta/meta.dart';
 
-void main() async {
-  
-}
+void main() async {}
