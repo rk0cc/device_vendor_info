@@ -7,10 +7,10 @@ import 'package:flutter/foundation.dart'
     show TargetPlatform, defaultTargetPlatform;
 import 'package:meta/meta.dart';
 
+import 'dictionary/async/dictionary.dart';
 import 'info/bios.dart';
 import 'info/board.dart';
 import 'info/system.dart';
-import 'dictionary.dart';
 
 /// A barebone loader for finding [BiosInfo] and [SystemInfo]
 /// in specific system.
@@ -82,19 +82,19 @@ abstract base class ProductiveDeviceVendorInfoLoader
   /// Grab informations found in [dictionary] to construct
   /// [BiosInfo] when calling [biosInfo].
   @protected
-  Future<BiosInfo> fetchBiosInfo(DeviceVendorInfoDictionary dictionary);
+  Future<BiosInfo> fetchBiosInfo(VendorDictionary dictionary);
 
   /// Grab informations found in [dictionary] to construct
   /// [BoardInfo] when calling [boardInfo].
   @protected
-  Future<BoardInfo> fetchBoardInfo(DeviceVendorInfoDictionary dictionary);
+  Future<BoardInfo> fetchBoardInfo(VendorDictionary dictionary);
 
   /// Grab informations found in [dictionary] to construct
   /// [SystemInfo] when calling [systemInfo].
   @protected
-  Future<SystemInfo> fetchSystemInfo(DeviceVendorInfoDictionary dictionary);
+  Future<SystemInfo> fetchSystemInfo(VendorDictionary dictionary);
 
-  /// Obtain [DeviceVendorInfoDictionary] for finding entity of
+  /// Obtain [DeviceDictionary] for finding entity of
   /// hardware information.
   ///
   /// All extended classes **must define** it as `final` property scope
@@ -104,7 +104,7 @@ abstract base class ProductiveDeviceVendorInfoLoader
   /// // Correct example
   /// base class SampleLoader extends ProductiveDeviceVendorLoader {
   ///   @override
-  ///   final DeviceVendorInfoDictionary dictionary = SampleDictionary();
+  ///   final VendorVDictionary dictionary = SampleDictionary();
   ///
   ///   // Other implementations
   /// }
@@ -112,10 +112,10 @@ abstract base class ProductiveDeviceVendorInfoLoader
   /// // Incorrect example
   /// base class InvalidLoader extends ProductiveDeviceVendorLoader {
   ///   @override
-  ///   DeviceVendorInfoDictionary get dictionary => SampleDictionary();
+  ///   VendorDictionary get dictionary => SampleDictionary();
   /// }
   /// ```
-  DeviceVendorInfoDictionary get dictionary;
+  VendorDictionary get dictionary;
 
   @override
   @nonVirtual

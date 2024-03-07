@@ -1,8 +1,6 @@
 ## 4.0.0
 
-* Migrate to `Map` based dictionary implementations.
-* Drop entire stringify dictionary function.
-* Define new exceptions for creating unsupported platform in `DeviceVendorInfoDictionary`.
+
 
 ## 3.0.0
 
