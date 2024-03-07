@@ -38,11 +38,7 @@ abstract base class SyncedVendorDictionaryBase<V>
       throw DictionaryKeyTypeMismatchError.singleType(String);
     }
 
-    try {
-      return entries.singleWhere((element) => element.key == key).value;
-    } on StateError {
-      throw UndefinedDictionaryKeyError(key);
-    }
+    return entries.singleWhere((element) => element.key == key).value;
   }
 
   @mustBeOverridden

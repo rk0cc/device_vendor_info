@@ -2,6 +2,8 @@
 /// during release.
 library release;
 
-export 'src/dictionary/async/dictionary.dart';
-export 'src/dictionary/sync/dictionary.dart';
+export 'src/dictionary/async/collections.dart' show VendorDictionaryCollection;
+export 'src/dictionary/async/dictionary.dart' show VendorDictionary;
+export 'src/dictionary/sync/dictionary.dart' show SyncedVendorDictionary;
+export 'src/dictionary/exceptions.dart';
 export 'src/loader.dart' show ProductiveDeviceVendorInfoLoader;

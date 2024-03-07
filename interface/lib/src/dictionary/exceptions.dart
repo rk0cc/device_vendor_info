@@ -3,10 +3,11 @@ import 'dart:io';
 import 'package:flutter/foundation.dart' show TargetPlatform;
 import 'package:meta/meta.dart';
 
+import 'async/collections.dart' show VendorDictionaryCollection;
 import 'async/dictionary.dart' show VendorDictionary;
 import 'sync/dictionary.dart' show SyncedVendorDictionary;
 
-/// Indicate [VendorDictionary] has been constructed under
+/// Indicates [VendorDictionary] has been constructed under
 /// unsupport platform.
 final class UnsupportDictionaryPlatformException implements IOException {
   /// Eligable [TargetPlatform] for [VendorDictionary].
@@ -140,20 +141,21 @@ final class DictionaryKeyTypeMismatchError extends TypeError
 }
 
 /// Error when the provided key does not existed in [VendorDictionary]
-/// and [SyncedVendorDictionary].
+/// and [SyncedVendorDictionary] or found duplicated keys when listening
+/// in [VendorDictionaryCollection].
 ///
 /// The origin implementation of [Map] will return `null` when no corresponded
 /// [MapEntry] found in [Map.entries]. However, [VendorDictionary] and
-/// [SyncedVendorDictionary] expected the  null type should be returned if
+/// [SyncedVendorDictionary] expected the null type should be returned if
 /// and only if the key existed in their entries. Otherwise, this exception
 /// thrown instead.
-final class UndefinedDictionaryKeyError extends InvalidDictionaryOperationError
+final class InvalidDictionaryKeyError extends InvalidDictionaryOperationError
     implements ArgumentError, StateError {
-  /// The invalid value based on when [Map] returns unexisted key,
-  /// which is [Null].
+  /// Applied key from [VendorDictionary] or [SyncedVendorDictionary] that
+  /// causing this error thrown.
   @override
   @nonVirtual
-  final Null invalidValue = null;
+  final String invalidValue;
 
   /// Parameter name.
   ///
@@ -162,15 +164,13 @@ final class UndefinedDictionaryKeyError extends InvalidDictionaryOperationError
   @override
   final String name;
 
-  /// Applied key that causing this error thrown.
-  final Object? key;
-
   @override
   final String message;
 
-  /// Consturct [UndefinedDictionaryKeyError] with parameter [name]
+  /// Consturct [InvalidDictionaryKeyError] with parameter [name]
   /// and [message].
-  UndefinedDictionaryKeyError(this.key, {this.name = "key", this.message = ""})
+  InvalidDictionaryKeyError(this.invalidValue, this.message,
+      {this.name = "key"})
       : super._();
 
   @override
@@ -179,13 +179,11 @@ final class UndefinedDictionaryKeyError extends InvalidDictionaryOperationError
 
     buf
       ..write("UndefinedDictionaryKeyError: ")
-      ..writeln(message.isNotEmpty
-          ? message
-          : "No entries found with corresponded keys.")
+      ..writeln(message)
       ..writeln()
       ..writeCharCode(9)
       ..write("Applied key: ")
-      ..writeln(key);
+      ..writeln(invalidValue);
 
     return buf.toString();
   }
