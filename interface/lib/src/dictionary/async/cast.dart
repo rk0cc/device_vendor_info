@@ -29,8 +29,8 @@ final class CastVendorDictionary<SV, RV> extends VendorDictionaryBase<RV> {
       CastVendorDictionary._(dictionary.entries);
 
   @override
-  VendorDictionary<R> cast<R>() {
-    return CastVendorDictionary<SV, R>._(_entries.origin);
+  VendorDictionary<NRV> cast<NRV>() {
+    return CastVendorDictionary<SV, NRV>._(_entries.origin);
   }
 
   @override
