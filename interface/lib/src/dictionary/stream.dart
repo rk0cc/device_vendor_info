@@ -3,7 +3,7 @@ import 'dart:collection';
 
 import 'package:meta/meta.dart';
 
-import '../typedef.dart';
+import 'typedef.dart';
 
 /// [Stream] based [DictionaryEntry] collection that each listeners
 /// will be isolated when [listen].

@@ -3,8 +3,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart' show TargetPlatform;
 import 'package:meta/meta.dart';
 
-import 'async/dictionary.dart' show VendorDictionary;
-import 'sync/dictionary.dart' show SyncedVendorDictionary;
+import 'dictionary.dart';
 
 /// Indicates [VendorDictionary] has been constructed under
 /// unsupport platform.

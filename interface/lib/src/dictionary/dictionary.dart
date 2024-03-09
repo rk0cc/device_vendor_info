@@ -1,6 +1,8 @@
-import '../exceptions.dart';
-import '../sync/dictionary.dart';
-import '../typedef.dart';
+import 'dart:collection';
+
+import '../bytes_conversion.dart';
+import 'exceptions.dart';
+import 'typedef.dart';
 import 'cast.dart';
 import 'stream.dart';
 import 'map.dart';
@@ -122,7 +124,7 @@ abstract base class VendorDictionaryBase<V> implements VendorDictionary<V> {
 
   @override
   VendorDictionary<RV> cast<RV>() {
-    return CastVendorDictionary(this);
+    return CastVendorDictionary<V, RV>(this);
   }
 
   @override
@@ -143,7 +145,7 @@ abstract base class VendorDictionaryBase<V> implements VendorDictionary<V> {
 
   @override
   String toString() {
-    return SyncedVendorDictionary(this).toString();
+    return "$synced";
   }
 
   @override
@@ -157,4 +159,78 @@ abstract base class VendorDictionaryBase<V> implements VendorDictionary<V> {
     throw InvalidDictionaryKeyError(
         key, "No corresponded entry found with associated key.");
   }
+}
+
+final class SyncedVendorDictionary<V>
+    extends UnmodifiableMapBase<String, V> {
+  late final int _length;
+  late final HashMap<String, V> _map;
+
+  SyncedVendorDictionary._(VendorDictionary<V> dictionary) {
+    _syncToMap(dictionary);
+  }
+
+  /// Sync all properties and elements in [VendorDictionary]
+  /// into [Future]-resolved types.
+  void _syncToMap(VendorDictionary<V> dictionary) async {
+    _length = await dictionary.length;
+    _map = HashMap();
+
+    // Do not uses forEach to implement that it may uses differ workflow
+    await for (var DictionaryEntry(key: k, value: v) in dictionary.entries) {
+      _map[k] = v;
+    }
+  }
+
+
+  @override
+  int get length => _length;
+
+  @override
+  V operator [](Object? key) {
+    if (key is! String) {
+      throw DictionaryKeyTypeMismatchError.singleType(String);
+    }
+
+    return entries.singleWhere((element) => element.key == key).value;
+  }
+
+
+  @override
+  Iterable<DictionaryEntry<V>> get entries => _map.entries;
+
+  @override
+  Iterable<String> get keys => entries.map((e) => e.key);
+
+  @override
+  Iterable<V> get values => entries.map((e) => e.value);
+
+  String toStringWithStringifyBytes(StringifyBytes method) {
+    final Iterable<String> pair = entries.map((e) {
+      var DictionaryEntry(key: k, value: v) = e;
+
+      final StringBuffer buf = StringBuffer()
+        ..write(k)
+        ..write(": ");
+
+      if (v is List<int>) {
+        buf.write(v.toStringifyBytes(method));
+      } else {
+        buf.write(v);
+      }
+
+      return buf.toString();
+    });
+
+    return "{${pair.join(", ")}}";
+  }
+
+  @override
+  String toString() {
+    return toStringWithStringifyBytes(StringifyBytes.upperHexadecimal);
+  }
+}
+
+extension VendorDictionarySynchronizer<V> on VendorDictionary<V> {
+  SyncedVendorDictionary<V> get synced => SyncedVendorDictionary._(this);
 }

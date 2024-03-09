@@ -7,7 +7,7 @@ import 'package:flutter/foundation.dart'
     show TargetPlatform, defaultTargetPlatform;
 import 'package:meta/meta.dart';
 
-import 'dictionary/async/dictionary.dart';
+import 'dictionary/dictionary.dart';
 import 'info/bios.dart';
 import 'info/board.dart';
 import 'info/system.dart';

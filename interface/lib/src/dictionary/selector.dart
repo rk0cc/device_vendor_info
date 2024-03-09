@@ -1,6 +1,6 @@
 import 'package:meta/meta.dart';
 
-import '../typedef.dart';
+import 'typedef.dart';
 import 'stream.dart';
 import 'dictionary.dart';
 
