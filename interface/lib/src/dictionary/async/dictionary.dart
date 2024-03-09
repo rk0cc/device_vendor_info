@@ -2,7 +2,7 @@ import '../exceptions.dart';
 import '../sync/dictionary.dart';
 import '../typedef.dart';
 import 'cast.dart';
-import 'collections.dart';
+import 'stream.dart';
 import 'map.dart';
 import 'selector.dart';
 
@@ -11,7 +11,7 @@ import 'selector.dart';
 abstract interface class VendorDictionary<V> {
   /// A collection of [DictionaryEntry] contains in this
   /// dictionary.
-  VendorDictionaryCollection<V> get entries;
+  VendorDictionaryEntriesStream<V> get entries;
 
   /// Streaming all available keys from [entries].
   Stream<String> get keys;
@@ -154,6 +154,7 @@ abstract base class VendorDictionaryBase<V> implements VendorDictionary<V> {
       }
     }
 
-    throw InvalidDictionaryKeyError(key, "No corresponded entry found with associated key.");
+    throw InvalidDictionaryKeyError(
+        key, "No corresponded entry found with associated key.");
   }
 }

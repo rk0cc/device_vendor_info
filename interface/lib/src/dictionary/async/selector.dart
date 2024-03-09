@@ -1,62 +1,73 @@
 import 'package:meta/meta.dart';
 
 import '../typedef.dart';
-import 'collections.dart';
+import 'stream.dart';
 import 'dictionary.dart';
 
-final class _VendorDictionaryCollectionSelector<V>
-    extends VendorDictionaryCollectionBase<V> {
+final class _VendorDictionaryEntriesStreamSelector<V>
+    extends VendorDictionaryEntriesStreamBase<V> {
   final bool Function(String key, V value) condition;
-  final VendorDictionaryCollection<V> soruce;
+  final VendorDictionaryEntriesStream<V> source;
 
-  _VendorDictionaryCollectionSelector(this.soruce, this.condition);
+  _VendorDictionaryEntriesStreamSelector(this.source, this.condition);
 
   @override
-  Stream<DictionaryEntry<V>> generator() async* {
-    await for (var DictionaryEntry(key: k, value: v) in soruce) {
-      if (condition(k, v)) {
-        yield DictionaryEntry(k, v);
+  Future<void> generateContent(DictionaryEntryStreamAdder<V> add,
+      DictionaryEntryStreamThrower addError) async {
+    try {
+      await for (var DictionaryEntry(key: k, value: v) in source) {
+        if (condition(k, v)) {
+          add(k, v);
+        }
       }
+    } catch (err, stackTrace) {
+      addError(err, stackTrace);
     }
   }
 }
 
-final class _VendorDictionaryCollectionTypedSelector<RV>
-    extends VendorDictionaryCollectionBase<RV> {
-  final VendorDictionaryCollection<Object?> soruce;
+final class _VendorDictionaryEntriesStreamTypedSelector<RV>
+    extends VendorDictionaryEntriesStreamBase<RV> {
+  final VendorDictionaryEntriesStream<Object?> source;
 
-  _VendorDictionaryCollectionTypedSelector(this.soruce);
+  _VendorDictionaryEntriesStreamTypedSelector(this.source);
 
   @override
-  Stream<DictionaryEntry<RV>> generator() async* {
-    await for (var DictionaryEntry(key: k, value: v) in soruce) {
-      if (v is RV) {
-        yield DictionaryEntry(k, v);
+  Future<void> generateContent(DictionaryEntryStreamAdder<RV> add,
+      DictionaryEntryStreamThrower addError) async {
+    try {
+      await for (var DictionaryEntry(key: k, value: v) in source) {
+        if (v is RV) {
+          add(k, v);
+        }
       }
+    } catch (err, stackTrace) {
+      addError(err, stackTrace);
     }
   }
 }
 
 @internal
 final class VendorDictionarySelector<V> extends VendorDictionaryBase<V> {
-  final _VendorDictionaryCollectionSelector<V> _entries;
+  final _VendorDictionaryEntriesStreamSelector<V> _entries;
 
   VendorDictionarySelector(VendorDictionary<V> dictionary,
       bool Function(String key, V value) condition)
-      : _entries =
-            _VendorDictionaryCollectionSelector(dictionary.entries, condition);
+      : _entries = _VendorDictionaryEntriesStreamSelector(
+            dictionary.entries, condition);
 
   @override
-  VendorDictionaryCollection<V> get entries => _entries;
+  VendorDictionaryEntriesStream<V> get entries => _entries;
 }
 
 @internal
 final class VendorDictionaryTypedSelector<RV> extends VendorDictionaryBase<RV> {
-  final _VendorDictionaryCollectionTypedSelector<RV> _entries;
+  final _VendorDictionaryEntriesStreamTypedSelector<RV> _entries;
 
   VendorDictionaryTypedSelector(VendorDictionary<Object?> dictionary)
-      : _entries = _VendorDictionaryCollectionTypedSelector(dictionary.entries);
+      : _entries =
+            _VendorDictionaryEntriesStreamTypedSelector(dictionary.entries);
 
   @override
-  VendorDictionaryCollection<RV> get entries => _entries;
+  VendorDictionaryEntriesStream<RV> get entries => _entries;
 }

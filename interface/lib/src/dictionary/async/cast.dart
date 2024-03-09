@@ -1,29 +1,34 @@
 import 'package:meta/meta.dart';
 
 import '../typedef.dart';
-import 'collections.dart';
+import 'stream.dart';
 import 'dictionary.dart';
 
-final class _CastVendorDictionaryCollection<SV, RV>
-    extends VendorDictionaryCollectionBase<RV> {
-  final VendorDictionaryCollection<SV> origin;
+final class _CastVendorDictionaryEntriesStream<SV, RV>
+    extends VendorDictionaryEntriesStreamBase<RV> {
+  final VendorDictionaryEntriesStream<SV> origin;
 
-  _CastVendorDictionaryCollection(this.origin);
+  _CastVendorDictionaryEntriesStream(this.origin);
 
   @override
-  Stream<DictionaryEntry<RV>> generator() async* {
-    await for (var DictionaryEntry(key: k, value: v) in origin) {
-      yield DictionaryEntry(k, v as RV);
+  Future<void> generateContent(DictionaryEntryStreamAdder<RV> add,
+      DictionaryEntryStreamThrower addError) async {
+    try {
+      await for (var DictionaryEntry(key: k, value: v) in origin) {
+        add(k, v as RV);
+      }
+    } catch (err, stackTrace) {
+      addError(err, stackTrace);
     }
   }
 }
 
 @internal
 final class CastVendorDictionary<SV, RV> extends VendorDictionaryBase<RV> {
-  final _CastVendorDictionaryCollection<SV, RV> _entries;
+  final _CastVendorDictionaryEntriesStream<SV, RV> _entries;
 
-  CastVendorDictionary._(VendorDictionaryCollection<SV> origin)
-      : _entries = _CastVendorDictionaryCollection(origin);
+  CastVendorDictionary._(VendorDictionaryEntriesStream<SV> origin)
+      : _entries = _CastVendorDictionaryEntriesStream(origin);
 
   factory CastVendorDictionary(VendorDictionary<SV> dictionary) =>
       CastVendorDictionary._(dictionary.entries);
@@ -34,5 +39,5 @@ final class CastVendorDictionary<SV, RV> extends VendorDictionaryBase<RV> {
   }
 
   @override
-  VendorDictionaryCollection<RV> get entries => _entries;
+  VendorDictionaryEntriesStream<RV> get entries => _entries;
 }

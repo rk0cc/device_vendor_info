@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/foundation.dart' show TargetPlatform;
 import 'package:meta/meta.dart';
 
-import 'async/collections.dart' show VendorDictionaryCollection;
 import 'async/dictionary.dart' show VendorDictionary;
 import 'sync/dictionary.dart' show SyncedVendorDictionary;
 
@@ -141,8 +140,7 @@ final class DictionaryKeyTypeMismatchError extends TypeError
 }
 
 /// Error when the provided key does not existed in [VendorDictionary]
-/// and [SyncedVendorDictionary] or found duplicated keys when listening
-/// in [VendorDictionaryCollection].
+/// and [SyncedVendorDictionary].
 ///
 /// The origin implementation of [Map] will return `null` when no corresponded
 /// [MapEntry] found in [Map.entries]. However, [VendorDictionary] and
