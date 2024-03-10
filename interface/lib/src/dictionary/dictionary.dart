@@ -1,4 +1,7 @@
 import 'dart:collection';
+import 'dart:typed_data';
+
+import 'package:meta/meta.dart';
 
 import 'exceptions.dart';
 import 'typedef.dart';
@@ -9,6 +12,13 @@ import 'selector.dart';
 
 /// Concurrent structures with [Map]-liked API that to obtains
 /// device vendor informations.
+/// 
+/// The rules of [values] type [V] should be followed in this list:
+/// 
+/// * If some [values] represents as binary, please assign them with
+///   [TypedData] implemented data type.
+/// * The ideal [values] type should be Dart's primitive type (e.g. [int],
+///   [String] and [bool]) along with [List].
 abstract interface class VendorDictionary<V> {
   /// A collection of [DictionaryEntry] contains in this
   /// dictionary.
@@ -143,11 +153,6 @@ abstract base class VendorDictionaryBase<V> implements VendorDictionary<V> {
   }
 
   @override
-  String toString() {
-    return "$synced";
-  }
-
-  @override
   Future<V> operator [](String key) async {
     await for (DictionaryEntry<V> de in entries) {
       if (de.key == key) {
@@ -163,24 +168,10 @@ abstract base class VendorDictionaryBase<V> implements VendorDictionary<V> {
 /// Unmodifiable [Map] version of [VendorDictionary] that all values
 /// no longer formed as [Future] with `await` requires.
 final class SyncedVendorDictionary<V> extends UnmodifiableMapBase<String, V> {
-  late final int _length;
-  late final HashMap<String, V> _map;
+  final int _length;
+  final Map<String, V> _map;
 
-  SyncedVendorDictionary._(VendorDictionary<V> dictionary) {
-    _syncToMap(dictionary);
-  }
-
-  /// Sync all properties and elements in [VendorDictionary]
-  /// into [Future]-resolved types.
-  void _syncToMap(VendorDictionary<V> dictionary) async {
-    _length = await dictionary.length;
-    _map = HashMap();
-
-    // Do not uses forEach to implement that it may uses differ workflow
-    await for (var DictionaryEntry(key: k, value: v) in dictionary.entries) {
-      _map[k] = v;
-    }
-  }
+  SyncedVendorDictionary._(this._map, this._length);
 
   void _checkKeyType(Object? key) {
     if (key is! String) {
@@ -227,9 +218,36 @@ final class SyncedVendorDictionary<V> extends UnmodifiableMapBase<String, V> {
 }
 
 /// An extension to convert [VendorDictionary], which operate asynchronously
-/// to [Future] resolved [SyncedVendorDictionary].
+/// to [Future] wrapped [SyncedVendorDictionary].
 extension VendorDictionarySynchronizer<V> on VendorDictionary<V> {
   /// Obtain [UnmodifiableMapBase], synced [VendorDictionary] with
   /// exact same key-value pair stored in this dictionary.
-  SyncedVendorDictionary<V> get synced => SyncedVendorDictionary._(this);
+  /// 
+  /// The returned [SyncedVendorDictionary.keys] does not ordered
+  /// that it causes difficulties when performing testes. Therefore,
+  /// to guarantee passing testes, use [syncAndSorted] instead.
+  Future<SyncedVendorDictionary<V>> get synced async {
+    HashMap<String, V> syncedMap = HashMap();
+
+    await for (var DictionaryEntry(key: k, value: v) in entries) {
+      syncedMap[k] = v;
+    }
+
+    return SyncedVendorDictionary._(syncedMap, await entries.length);
+  }
+
+  /// Obtain [UnmodifiableMapBase], synced [VendorDictionary] that
+  /// the [keys] are ordered by [String.compareTo].
+  /// 
+  /// Since it may spend additional times for sorting [keys] before
+  /// attach into [SyncedVendorDictionary], it only available
+  /// for performing testes only.
+  @visibleForTesting
+  Future<SyncedVendorDictionary<V>> get syncAndSorted async {
+    List<DictionaryEntry<V>> entriesBuf = await entries.toList();
+    entriesBuf.sort((e1, e2) => e1.key.compareTo(e2.key));
+
+    return SyncedVendorDictionary._(
+        LinkedHashMap()..addEntries(entriesBuf), entriesBuf.length);
+  }
 }
