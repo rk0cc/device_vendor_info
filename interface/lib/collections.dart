@@ -1,3 +1,5 @@
+/// A library for specify asynchronous data structure for accessing
+/// data between system and Flutter.
 library collections;
 
 export 'src/dictionary/dictionary.dart';

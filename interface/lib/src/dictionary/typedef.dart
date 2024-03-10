@@ -11,4 +11,6 @@ typedef DictionaryEntryStreamAdder<V> = void Function(String key, V value);
 typedef DictionaryEntryStreamThrower = void Function(Object error,
     [StackTrace? stackTrace]);
 
+/// A [Function] that to temprorary create [Stream] used by
+/// [VendorDictionaryEntriesStream.new].
 typedef EntriesStreamGenerator<V> = Stream<(String, V)> Function();

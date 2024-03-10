@@ -1,3 +1,8 @@
+## 4.0.1
+
+* Resolved linting problems.
+* Apply missing docs.
+
 ## 4.0.0
 
 **WARNING: THIS VERSION'S API IS INCOMPATABLE WITH `3.0.0` OR BELOW**

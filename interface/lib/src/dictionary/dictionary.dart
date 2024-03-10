@@ -18,9 +18,14 @@ import 'selector.dart';
 /// * The ideal [values] type should be Dart's primitive type (e.g. [int],
 ///   [String] and [bool]) along with [List].
 abstract interface class VendorDictionary<V> {
+  /// Construct *ad hoc* [VendorDictionary] that relys on [generator]
+  /// for one uses purpose.
   factory VendorDictionary.instant(EntriesStreamGenerator<V> generator) =
       _InstantVendorDictionary;
 
+  /// Emulate [VendorDictionary] behaviours from [Map] by simply
+  /// creating [VendorDictionary.instant] and yield all [Map.entries]
+  /// contents.
   factory VendorDictionary.fromMap(Map<String, V> map) =>
       VendorDictionary.instant(() async* {
         for (var DictionaryEntry(key: k, value: v) in map.entries) {
