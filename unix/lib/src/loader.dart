@@ -1,10 +1,10 @@
-import 'dart:io';
+import 'dart:async';
 
 import 'package:device_vendor_info_interface/definitions.dart';
 import 'package:device_vendor_info_interface/interface.dart';
 import 'package:device_vendor_info_interface/release.dart';
 
-import 'dictionary.dart' hide UnixDeviceVendorInfoDictionaryExtension;
+import 'dictionary.dart';
 
 /// UNIX based [DeviceVendorInfoLoader] for getting hardware information.
 final class UnixDeviceVendorInfoLoader
@@ -14,45 +14,85 @@ final class UnixDeviceVendorInfoLoader
   /// The corresponded entities will be stored  `/sys/class/dmi/id/`
   /// and extract them (not include subdirectories).
   @override
-  late final DeviceVendorInfoDictionary dictionary;
+  final VendorDictionary dictionary;
 
   /// Construct new instance for fetching hardward information.
-  UnixDeviceVendorInfoLoader() {
-    if (!Platform.isLinux && !Platform.isMacOS) {
-      throw UnsupportedError(
-          "This loader is for UNIX platform (e.g. macOS, Linux) only");
-    }
+  UnixDeviceVendorInfoLoader() : dictionary = UnixVendorDictionary();
 
-    dictionary = UnixDeviceVendorInfoDictionary();
+  static Future<void> _guardAssign(FutureOr<void> Function() assigner) async {
+    try {
+      assigner();
+    } on InvalidDictionaryKeyError {
+      // Do nothing
+    }
   }
 
   @override
-  Future<BiosInfo> fetchBiosInfo(DeviceVendorInfoDictionary dictionary) async {
-    String? releaseDate = await dictionary["bios_date"] as String?;
+  Future<BiosInfo> fetchBiosInfo(VendorDictionary dictionary) async {
+    String? releaseDate, vendor, version;
+
+    await Future.wait([
+      _guardAssign(() async {
+        releaseDate = await dictionary["bios_date"];
+      }),
+      _guardAssign(() async {
+        vendor = await dictionary["bios_vendor"];
+      }),
+      _guardAssign(() async {
+        version = await dictionary["bios_version"];
+      })
+    ]);
 
     return BiosInfo(
-        vendor: await dictionary["bios_vendor"] as String?,
-        version: await dictionary["bios_version"] as String?,
+        vendor: vendor,
+        version: version,
         releaseDate:
-            releaseDate == null ? null : biosDateFormat.parse(releaseDate));
+            releaseDate == null ? null : biosDateFormat.parse(releaseDate!));
   }
 
   @override
-  Future<BoardInfo> fetchBoardInfo(
-      DeviceVendorInfoDictionary dictionary) async {
+  Future<BoardInfo> fetchBoardInfo(VendorDictionary dictionary) async {
+    String? manufacturer, productName, version;
+
+    await Future.wait([
+      _guardAssign(() async {
+        manufacturer = await dictionary["board_vendor"];
+      }),
+      _guardAssign(() async {
+        productName = await dictionary["board_name"];
+      }),
+      _guardAssign(() async {
+        version = await dictionary["board_version"];
+      })
+    ]);
+
     return BoardInfo(
-        manufacturer: await dictionary["board_vendor"] as String?,
-        productName: await dictionary["board_name"] as String?,
-        version: await dictionary["board_version"] as String?);
+        manufacturer: manufacturer, productName: productName, version: version);
   }
 
   @override
-  Future<SystemInfo> fetchSystemInfo(
-      DeviceVendorInfoDictionary dictionary) async {
+  Future<SystemInfo> fetchSystemInfo(VendorDictionary dictionary) async {
+    String? family, manufacturer, productName, version;
+
+    await Future.wait([
+      _guardAssign(() async {
+        manufacturer = await dictionary["sys_vendor"];
+      }),
+      _guardAssign(() async {
+        productName = await dictionary["product_name"];
+      }),
+      _guardAssign(() async {
+        version = await dictionary["product_version"];
+      }),
+      _guardAssign(() async {
+        family = await dictionary["product_family"];
+      })
+    ]);
+
     return SystemInfo(
-        family: await dictionary["product_family"] as String?,
-        manufacturer: await dictionary["sys_vendor"] as String?,
-        productName: await dictionary["product_name"] as String?,
-        version: await dictionary["product_version"] as String?);
+        family: family,
+        manufacturer: manufacturer,
+        productName: productName,
+        version: version);
   }
 }

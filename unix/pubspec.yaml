@@ -10,7 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
   meta: ^1.10.0
-  device_vendor_info_interface: ^3.0.0
+  device_vendor_info_interface: ^4.0.0
   async: ^2.11.0
   path: ^1.8.3
 dev_dependencies:

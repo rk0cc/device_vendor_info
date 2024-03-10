@@ -1,3 +1,7 @@
+## 1.0.0-beta.2
+
+* Upgrade to v4 interface.
+
 ## 1.0.0-beta.1
 
 * Deploy v2 interface.
