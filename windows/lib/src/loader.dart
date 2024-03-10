@@ -27,14 +27,13 @@ final class WindowsDeviceVendorInfoLoader
   /// * [Uint8List], unmodifiable - [RegistryValueType.binary].
   /// * [List] of [String], unmodifiable - [RegistryValueType.stringArray].
   @override
-  final DeviceVendorInfoDictionary dictionary;
+  final VendorDictionary dictionary;
 
   /// Create new instance for fetching hardward information.
-  WindowsDeviceVendorInfoLoader()
-      : dictionary = WindowsDeviceVendorInfoDictionary();
+  WindowsDeviceVendorInfoLoader() : dictionary = WindowsVendorDictionary();
 
   @override
-  Future<BiosInfo> fetchBiosInfo(DeviceVendorInfoDictionary dictionary) async {
+  Future<BiosInfo> fetchBiosInfo(VendorDictionary dictionary) async {
     String? releaseDateString = await dictionary["BIOSReleaseDate"] as String?;
 
     return BiosInfo(
@@ -46,8 +45,7 @@ final class WindowsDeviceVendorInfoLoader
   }
 
   @override
-  Future<BoardInfo> fetchBoardInfo(
-      DeviceVendorInfoDictionary dictionary) async {
+  Future<BoardInfo> fetchBoardInfo(VendorDictionary dictionary) async {
     return BoardInfo(
         manufacturer: await dictionary["BaseBoardManufacturer"] as String?,
         productName: await dictionary["BaseBoardProduct"] as String?,
@@ -55,8 +53,7 @@ final class WindowsDeviceVendorInfoLoader
   }
 
   @override
-  Future<SystemInfo> fetchSystemInfo(
-      DeviceVendorInfoDictionary dictionary) async {
+  Future<SystemInfo> fetchSystemInfo(VendorDictionary dictionary) async {
     return SystemInfo(
         family: await dictionary["SystemFamily"] as String?,
         manufacturer: await dictionary["SystemManufacturer"] as String?,

@@ -1,3 +1,7 @@
+## 1.0.0-beta.3
+
+* Upgrade to v4 interface.
+
 ## 1.0.0-beta.2
 
 * Upgrade to v3 interface.
