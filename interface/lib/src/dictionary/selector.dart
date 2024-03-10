@@ -47,10 +47,14 @@ final class _VendorDictionaryEntriesStreamTypedSelector<RV>
   }
 }
 
+/// Filter various [keys] and [values] from [VendorDictionary] and yield
+/// matched one.
 @internal
 final class VendorDictionarySelector<V> extends VendorDictionaryBase<V> {
   final _VendorDictionaryEntriesStreamSelector<V> _entries;
 
+  /// Create new selector that only retains matched [condition] from
+  /// original [dictionary].
   VendorDictionarySelector(VendorDictionary<V> dictionary,
       bool Function(String key, V value) condition)
       : _entries = _VendorDictionaryEntriesStreamSelector(
@@ -60,10 +64,12 @@ final class VendorDictionarySelector<V> extends VendorDictionaryBase<V> {
   VendorDictionaryEntriesStream<V> get entries => _entries;
 }
 
+/// Filter [VendorDictionary.values] to selected type [RV].
 @internal
 final class VendorDictionaryTypedSelector<RV> extends VendorDictionaryBase<RV> {
   final _VendorDictionaryEntriesStreamTypedSelector<RV> _entries;
 
+  /// Attach original [dictionary] and retain [values] that is [RV] type.
   VendorDictionaryTypedSelector(VendorDictionary<Object?> dictionary)
       : _entries =
             _VendorDictionaryEntriesStreamTypedSelector(dictionary.entries);

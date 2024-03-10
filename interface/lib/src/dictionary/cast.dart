@@ -13,6 +13,7 @@ final class _CastVendorDictionaryEntriesStream<SV, RV>
   @override
   Future<void> generateContent(DictionaryEntryStreamAdder<RV> add,
       DictionaryEntryStreamThrower addError) async {
+    
     try {
       await for (var DictionaryEntry(key: k, value: v) in origin) {
         add(k, v as RV);
@@ -23,6 +24,7 @@ final class _CastVendorDictionaryEntriesStream<SV, RV>
   }
 }
 
+/// Convert original [VendorDictionary.values] type [SV] to [RV].
 @internal
 final class CastVendorDictionary<SV, RV> extends VendorDictionaryBase<RV> {
   final _CastVendorDictionaryEntriesStream<SV, RV> _entries;
@@ -30,9 +32,12 @@ final class CastVendorDictionary<SV, RV> extends VendorDictionaryBase<RV> {
   CastVendorDictionary._(VendorDictionaryEntriesStream<SV> origin)
       : _entries = _CastVendorDictionaryEntriesStream(origin);
 
+  /// Cast [dictionary] with [values] from [SV] to [RV] type.
   factory CastVendorDictionary(VendorDictionary<SV> dictionary) =>
       CastVendorDictionary._(dictionary.entries);
 
+  /// Create new [CastVendorDictionary] and cast [RV] to [NRV], based on
+  /// original [VendorDictionaryEntriesStream] applied.
   @override
   VendorDictionary<NRV> cast<NRV>() {
     return CastVendorDictionary<SV, NRV>._(_entries.origin);

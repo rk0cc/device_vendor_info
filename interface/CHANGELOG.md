@@ -1,6 +1,10 @@
 ## 4.0.0
 
+**WARNING: THIS VERSION'S API IS INCOMPATABLE WITH `3.0.0` OR BELOW**
 
+* Class rename
+    * `DeviceVendorInfoDictionary` becomes `VendorDictionary`
+* Redefine dictionray's entires stream API.
 
 ## 3.0.0
 

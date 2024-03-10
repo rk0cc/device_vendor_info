@@ -67,9 +67,46 @@ void main() {
         expect(normalThrows, throwsA(isA<InvalidDictionaryKeyError>()));
       });
     });
+
     test("Disallow modify for synced dictionary", () {
       expect(() => syncedTestDict["0"] = 0, throwsUnsupportedError);
       expect(() => syncedTestDict["foo"] = "bar", throwsUnsupportedError);
+    });
+  });
+
+  group("Vendor dictionary altering:", () {
+    test("Mapping", () async {
+      expect(
+          await testDict
+              .map<dynamic>((key, value) => DictionaryEntry(key, "$value"))
+              .values
+              .every((element) => element is String),
+          isTrue);
+    });
+
+    test("Selecting", () async {
+      expect(await testDict.where((key, value) => value != null).length,
+          equals(5));
+      expect(await testDict.whereValueType<List<int>>().length, equals(2));
+    });
+
+    test("Casting", () async {
+      void streamAction<T>(VendorDictionary<Object?> dict) async {
+        await dict.cast<T>().forEach((key, value) {});
+      }
+
+      expect(
+          () => streamAction<int>(
+              VendorDictionary.fromMap(const {"foo": 1, "bar": 2})),
+          returnsNormally);
+      expect(
+          () => streamAction<num>(
+              VendorDictionary.fromMap(const {"foo": 0xA, "bar": math.sqrt2})),
+          returnsNormally);
+      expect(
+          () => streamAction<String>(
+              VendorDictionary.fromMap(const {"foo": "Hi", "bar": false})),
+          throwsA(isA<TypeError>()));
     });
   });
 }

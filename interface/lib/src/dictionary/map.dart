@@ -25,12 +25,16 @@ final class _VendorDictionaryEntriesStreamMapper<SV, RV>
   }
 }
 
+/// Apply [values] conversion to another object with completely difference
+/// [values] type.
 @internal
-final class MapVendorDictionaryCollection<SV, RV>
+final class MapVendorDictionary<SV, RV>
     extends VendorDictionaryBase<RV> {
   final _VendorDictionaryEntriesStreamMapper<SV, RV> _entries;
 
-  MapVendorDictionaryCollection(VendorDictionary<SV> dictionary,
+  /// Create new [MapVendorDictionary] and [convert] to ideal [values]
+  /// in [RV] type as well as alter [keys].
+  MapVendorDictionary(VendorDictionary<SV> dictionary,
       DictionaryEntry<RV> Function(String key, SV value) convert)
       : _entries =
             _VendorDictionaryEntriesStreamMapper(dictionary.entries, convert);

@@ -36,7 +36,7 @@ abstract final class VendorDictionaryEntriesStream<V>
   /// [DictionaryEntry] from the same sources or allow store as constant,
   /// please extends [VendorDictionaryEntriesStreamBase] instead.
   factory VendorDictionaryEntriesStream(
-          Stream<(String, V)> Function() generator) =
+          EntriesStreamGenerator<V> generator) =
       _InstantVendorDictionaryEntriesStream;
 
   /// Converting [VendorDictionaryEntriesStream] to broadcast [Stream]

@@ -1,6 +1,8 @@
 import 'dart:collection';
 import 'dart:typed_data';
 
+import 'package:device_vendor_info_interface/collections.dart';
+import 'package:device_vendor_info_interface/release.dart';
 import 'package:meta/meta.dart';
 
 import 'exceptions.dart';
@@ -12,14 +14,24 @@ import 'selector.dart';
 
 /// Concurrent structures with [Map]-liked API that to obtains
 /// device vendor informations.
-/// 
-/// The rules of [values] type [V] should be followed in this list:
-/// 
+///
+/// The guideline of [values] type [V] should be followed in this list:
+///
 /// * If some [values] represents as binary, please assign them with
 ///   [TypedData] implemented data type.
 /// * The ideal [values] type should be Dart's primitive type (e.g. [int],
 ///   [String] and [bool]) along with [List].
 abstract interface class VendorDictionary<V> {
+  factory VendorDictionary.instant(EntriesStreamGenerator<V> generator) =
+      _InstantVendorDictionary;
+
+  factory VendorDictionary.fromMap(Map<String, V> map) =>
+      VendorDictionary.instant(() async* {
+        for (var DictionaryEntry(key: k, value: v) in map.entries) {
+          yield (k, v);
+        }
+      });
+
   /// A collection of [DictionaryEntry] contains in this
   /// dictionary.
   VendorDictionaryEntriesStream<V> get entries;
@@ -139,7 +151,7 @@ abstract base class VendorDictionaryBase<V> implements VendorDictionary<V> {
   @override
   VendorDictionary<RV> map<RV>(
       DictionaryEntry<RV> Function(String key, V value) convert) {
-    return MapVendorDictionaryCollection<V, RV>(this, convert);
+    return MapVendorDictionary<V, RV>(this, convert);
   }
 
   @override
@@ -163,6 +175,14 @@ abstract base class VendorDictionaryBase<V> implements VendorDictionary<V> {
     throw InvalidDictionaryKeyError(
         key, "No corresponded entry found with associated key.");
   }
+}
+
+final class _InstantVendorDictionary<V> extends VendorDictionaryBase<V> {
+  @override
+  final VendorDictionaryEntriesStream<V> entries;
+
+  _InstantVendorDictionary(EntriesStreamGenerator<V> generator)
+      : entries = VendorDictionaryEntriesStream(generator);
 }
 
 /// Unmodifiable [Map] version of [VendorDictionary] that all values
@@ -222,7 +242,7 @@ final class SyncedVendorDictionary<V> extends UnmodifiableMapBase<String, V> {
 extension VendorDictionarySynchronizer<V> on VendorDictionary<V> {
   /// Obtain [UnmodifiableMapBase], synced [VendorDictionary] with
   /// exact same key-value pair stored in this dictionary.
-  /// 
+  ///
   /// The returned [SyncedVendorDictionary.keys] does not ordered
   /// that it causes difficulties when performing testes. Therefore,
   /// to guarantee passing testes, use [syncAndSorted] instead.
@@ -238,7 +258,7 @@ extension VendorDictionarySynchronizer<V> on VendorDictionary<V> {
 
   /// Obtain [UnmodifiableMapBase], synced [VendorDictionary] that
   /// the [keys] are ordered by [String.compareTo].
-  /// 
+  ///
   /// Since it may spend additional times for sorting [keys] before
   /// attach into [SyncedVendorDictionary], it only available
   /// for performing testes only.
