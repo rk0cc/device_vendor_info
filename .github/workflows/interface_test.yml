@@ -1,0 +1,28 @@
+name: Interface test
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/interface_test.yml'
+      - 'interface/**/*.dart'
+      - '!interface/lib/src/info/*.dart'
+env:
+  working-directory: './interface'
+jobs:
+  unit_test:
+    name: Unit test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - name: Get dependencies
+        working-directory: ${{ env.working-directory }}
+        run: flutter pub get
+      - name: Execute test
+        working-directory: ${{ env.working-directory }}
+        run: flutter test
