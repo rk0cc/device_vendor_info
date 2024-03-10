@@ -28,8 +28,7 @@ final class _VendorDictionaryEntriesStreamMapper<SV, RV>
 /// Apply [values] conversion to another object with completely difference
 /// [values] type.
 @internal
-final class MapVendorDictionary<SV, RV>
-    extends VendorDictionaryBase<RV> {
+final class MapVendorDictionary<SV, RV> extends VendorDictionaryBase<RV> {
   final _VendorDictionaryEntriesStreamMapper<SV, RV> _entries;
 
   /// Create new [MapVendorDictionary] and [convert] to ideal [values]

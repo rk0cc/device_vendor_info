@@ -35,8 +35,7 @@ abstract final class VendorDictionaryEntriesStream<V>
   /// It only suitable for temprorary implementations, for generating
   /// [DictionaryEntry] from the same sources or allow store as constant,
   /// please extends [VendorDictionaryEntriesStreamBase] instead.
-  factory VendorDictionaryEntriesStream(
-          EntriesStreamGenerator<V> generator) =
+  factory VendorDictionaryEntriesStream(EntriesStreamGenerator<V> generator) =
       _InstantVendorDictionaryEntriesStream;
 
   /// Converting [VendorDictionaryEntriesStream] to broadcast [Stream]

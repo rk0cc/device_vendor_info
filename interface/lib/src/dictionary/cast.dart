@@ -13,7 +13,6 @@ final class _CastVendorDictionaryEntriesStream<SV, RV>
   @override
   Future<void> generateContent(DictionaryEntryStreamAdder<RV> add,
       DictionaryEntryStreamThrower addError) async {
-    
     try {
       await for (var DictionaryEntry(key: k, value: v) in origin) {
         add(k, v as RV);
