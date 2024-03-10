@@ -2,13 +2,9 @@ import 'dart:collection';
 import 'dart:typed_data';
 
 import 'package:device_vendor_info_interface/collections.dart';
-import 'package:device_vendor_info_interface/release.dart';
 import 'package:meta/meta.dart';
 
-import 'exceptions.dart';
-import 'typedef.dart';
 import 'cast.dart';
-import 'stream.dart';
 import 'map.dart';
 import 'selector.dart';
 

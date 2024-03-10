@@ -26,6 +26,7 @@ import 'typedef.dart';
 /// process, it does not gurantte the order of entries.
 abstract final class VendorDictionaryEntriesStream<V>
     implements Stream<DictionaryEntry<V>> {
+  // ignore: unused_element
   const VendorDictionaryEntriesStream._();
 
   /// Create an instant, ready-to-use [VendorDictionaryEntriesStream]
