@@ -1,6 +1,5 @@
 import 'dart:collection';
 
-import '../bytes_conversion.dart';
 import 'exceptions.dart';
 import 'typedef.dart';
 import 'cast.dart';
@@ -66,7 +65,7 @@ abstract interface class VendorDictionary<V> {
   /// Obtains [values] associated with [key].
   ///
   /// If the given [key] causes [containsKey] returns
-  /// `false`, it must throws [UndefinedDictionaryKeyError].
+  /// `false`, it must throws [InvalidDictionaryKeyError].
   Future<V> operator [](String key);
 }
 
@@ -161,8 +160,9 @@ abstract base class VendorDictionaryBase<V> implements VendorDictionary<V> {
   }
 }
 
-final class SyncedVendorDictionary<V>
-    extends UnmodifiableMapBase<String, V> {
+/// Unmodifiable [Map] version of [VendorDictionary] that all values
+/// no longer formed as [Future] with `await` requires.
+final class SyncedVendorDictionary<V> extends UnmodifiableMapBase<String, V> {
   late final int _length;
   late final HashMap<String, V> _map;
 
@@ -182,19 +182,33 @@ final class SyncedVendorDictionary<V>
     }
   }
 
-
-  @override
-  int get length => _length;
-
-  @override
-  V operator [](Object? key) {
+  void _checkKeyType(Object? key) {
     if (key is! String) {
       throw DictionaryKeyTypeMismatchError.singleType(String);
+    }
+  }
+
+  /// Get corresponded [values], which associated with [key].
+  ///
+  /// Unlike [Map] will return [Null] when no value paired with [key],
+  /// it throws [InvalidDictionaryKeyError].
+  ///
+  /// In additions, the [key] must be [String] type, applying other types
+  /// will throw [DictionaryKeyTypeMismatchError].
+  @override
+  V operator [](Object? key) {
+    _checkKeyType(key);
+
+    if (!containsKey(key)) {
+      throw InvalidDictionaryKeyError(key as String,
+          "No value found that it associated with the given key.");
     }
 
     return entries.singleWhere((element) => element.key == key).value;
   }
 
+  @override
+  int get length => _length;
 
   @override
   Iterable<DictionaryEntry<V>> get entries => _map.entries;
@@ -205,32 +219,17 @@ final class SyncedVendorDictionary<V>
   @override
   Iterable<V> get values => entries.map((e) => e.value);
 
-  String toStringWithStringifyBytes(StringifyBytes method) {
-    final Iterable<String> pair = entries.map((e) {
-      var DictionaryEntry(key: k, value: v) = e;
-
-      final StringBuffer buf = StringBuffer()
-        ..write(k)
-        ..write(": ");
-
-      if (v is List<int>) {
-        buf.write(v.toStringifyBytes(method));
-      } else {
-        buf.write(v);
-      }
-
-      return buf.toString();
-    });
-
-    return "{${pair.join(", ")}}";
-  }
-
   @override
-  String toString() {
-    return toStringWithStringifyBytes(StringifyBytes.upperHexadecimal);
+  bool containsKey(Object? key) {
+    _checkKeyType(key);
+    return super.containsKey(key);
   }
 }
 
+/// An extension to convert [VendorDictionary], which operate asynchronously
+/// to [Future] resolved [SyncedVendorDictionary].
 extension VendorDictionarySynchronizer<V> on VendorDictionary<V> {
+  /// Obtain [UnmodifiableMapBase], synced [VendorDictionary] with
+  /// exact same key-value pair stored in this dictionary.
   SyncedVendorDictionary<V> get synced => SyncedVendorDictionary._(this);
 }

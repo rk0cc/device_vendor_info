@@ -1,45 +1,6 @@
-import 'dart:io';
-
-import 'package:flutter/foundation.dart' show TargetPlatform;
 import 'package:meta/meta.dart';
 
 import 'dictionary.dart';
-
-/// Indicates [VendorDictionary] has been constructed under
-/// unsupport platform.
-final class UnsupportDictionaryPlatformException implements IOException {
-  /// Eligable [TargetPlatform] for [VendorDictionary].
-  final Iterable<TargetPlatform> supportedPlatform;
-
-  /// Create exception with expected platform.
-  ///
-  /// Specifying [linux], [macOS] and [windows] to indicate the
-  /// supported platform when using [VendorDictionary].
-  /// Therefore, at least one of them must be defined as `true`.
-  UnsupportDictionaryPlatformException(
-      {bool linux = false, bool macOS = false, bool windows = false})
-      : assert(linux || macOS || windows),
-        supportedPlatform = List.unmodifiable(<TargetPlatform>[
-          if (linux) TargetPlatform.linux,
-          if (macOS) TargetPlatform.macOS,
-          if (windows) TargetPlatform.windows
-        ]);
-
-  /// Create exception that applied for all supported platform.
-  ///
-  /// This constructor is equivalent to this code:
-  ///
-  /// ```dart
-  /// throw UnsupportDictionaryPlatformException(linux: true, macOS: true, windows: true);
-  /// ```
-  @visibleForTesting
-  UnsupportDictionaryPlatformException.allPlatforms()
-      : supportedPlatform = const <TargetPlatform>[
-          TargetPlatform.linux,
-          TargetPlatform.macOS,
-          TargetPlatform.windows
-        ];
-}
 
 /// An abstract, general defintion of [Error] regarding to
 /// invalid opertation in [VendorDictionary] and [SyncedVendorDictionary].

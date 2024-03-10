@@ -71,6 +71,7 @@ abstract final class VendorDictionaryEntriesStream<V>
 abstract base class VendorDictionaryEntriesStreamBase<V>
     extends Stream<DictionaryEntry<V>>
     implements VendorDictionaryEntriesStream<V> {
+  @nonVirtual
   @override
   final bool isBroadcast = false;
 
