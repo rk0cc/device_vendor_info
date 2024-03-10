@@ -7,8 +7,6 @@ import 'src/instance.dart';
 
 export 'package:device_vendor_info_interface/interface.dart'
     show BiosInfo, BoardInfo, SystemInfo;
-export 'package:device_vendor_info_unix/device_vendor_info_unix.dart'
-    show UnixDeviceVendorInfoDictionaryExtension;
 
 /// Direct callback for fetching [BiosInfo] from [DeviceVendorInfo.instance].
 Future<BiosInfo> getBiosInfo() => DeviceVendorInfo.instance.biosInfo;
@@ -28,14 +26,14 @@ Future<Map<String, dynamic>> exportVendorInfoToJson() async =>
       "system": await getSystemInfo().then((value) => value.toJson())
     });
 
-/// Return original hardware metadata into [String]-[String] JSON
+/// Return original hardware metadata into [String] key JSON
 /// format.
-Future<Map<String, Object>> exportRawVendorInfoToJson() async {
+Future<Map<String, dynamic>> exportRawVendorInfoToJson() async {
   final DeviceVendorInfoLoader loader = DeviceVendorInfo.instance;
 
   if (loader is ProductiveDeviceVendorInfoLoader) {
-    return loader.dictionary.toMap();
+    return loader.dictionary.synced;
   }
 
-  return const <String, String>{};
+  return const <String, dynamic>{};
 }

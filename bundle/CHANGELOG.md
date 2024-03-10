@@ -1,3 +1,8 @@
+## 1.0.0-beta.2
+
+* Uses v4 interface API
+* Switch to `dart:io` to determine release platform.
+
 ## 1.0.0-beta.1
 
 * New interface implementations.

@@ -1,7 +1,8 @@
+import 'dart:io' show Platform;
+
 import 'package:device_vendor_info_interface/interface.dart';
 import 'package:device_vendor_info_unix/device_vendor_info_unix.dart';
 import 'package:device_vendor_info_windows/device_vendor_info_windows.dart';
-import 'package:flutter/foundation.dart';
 
 /// Entry class for fetching device information.
 ///
@@ -13,21 +14,13 @@ final class DeviceVendorInfo {
   const DeviceVendorInfo._();
 
   static DeviceVendorInfoLoader get _releaseLoader {
-    Never unexpectedPlatform() {
-      throw UnsupportedError("Unable to get loader for unsupported system");
+    if (Platform.isWindows) {
+      return WindowsDeviceVendorInfoLoader();
+    } else if (Platform.isLinux || Platform.isMacOS) {
+      return UnixDeviceVendorInfoLoader();
     }
 
-    if (kIsWeb) {
-      unexpectedPlatform();
-    }
-
-    return switch (defaultTargetPlatform) {
-      TargetPlatform.linux ||
-      TargetPlatform.macOS =>
-        UnixDeviceVendorInfoLoader(),
-      TargetPlatform.windows => WindowsDeviceVendorInfoLoader(),
-      _ => unexpectedPlatform()
-    };
+    throw UnsupportedError("Unable to get loader for unsupported system");
   }
 
   /// Get current instance for fetching hardware information.
