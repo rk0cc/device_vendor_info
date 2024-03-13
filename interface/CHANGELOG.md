@@ -1,3 +1,7 @@
+## 4.1.0
+
+* Remove `synced` and `syncAndSorted` getter. These features have been replaced by `toSynced()`.
+
 ## 4.0.1
 
 * Resolved linting problems.
