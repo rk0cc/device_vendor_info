@@ -1,12 +1,13 @@
 import 'dart:collection';
+import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:device_vendor_info_interface/collections.dart';
-import 'package:meta/meta.dart';
-
 import 'cast.dart';
+import 'exceptions.dart';
 import 'map.dart';
 import 'selector.dart';
+import 'stream.dart';
+import 'typedef.dart';
 
 /// Concurrent structures with [Map]-liked API that to obtains
 /// device vendor informations.
@@ -243,32 +244,29 @@ final class SyncedVendorDictionary<V> extends UnmodifiableMapBase<String, V> {
 extension VendorDictionarySynchronizer<V> on VendorDictionary<V> {
   /// Obtain [UnmodifiableMapBase], synced [VendorDictionary] with
   /// exact same key-value pair stored in this dictionary.
-  ///
-  /// The returned [SyncedVendorDictionary.keys] does not ordered
-  /// that it causes difficulties when performing testes. Therefore,
-  /// to guarantee passing testes, use [syncAndSorted] instead.
-  Future<SyncedVendorDictionary<V>> get synced async {
-    HashMap<String, V> syncedMap = HashMap();
+  /// 
+  /// By default, it should be returned unsorted [Map] based
+  /// [SyncedVendorDictionary]. To enable sorting order of [Map],
+  /// [sortEntries] should be defined, unless it called during testing
+  /// which will be sorted by [VendorDictionary.keys].
+  Future<SyncedVendorDictionary<V>> toSynced(
+      {Comparator<DictionaryEntry<V>>? sortEntries}) async {
+    final List<DictionaryEntry<V>> syncedEntries = await entries.toList();
+    late final Map<String, V> syncedMap;
 
-    await for (var DictionaryEntry(key: k, value: v) in entries) {
-      syncedMap[k] = v;
+    if (sortEntries != null ||
+        Platform.environment.containsKey("FLUTTER_TEST")) {
+      syncedEntries.sort(sortEntries ?? _keySort);
+      syncedMap = LinkedHashMap();
+    } else {
+      syncedMap = HashMap();
     }
 
-    return SyncedVendorDictionary._(syncedMap, await entries.length);
-  }
+    syncedMap.addEntries(syncedEntries);
 
-  /// Obtain [UnmodifiableMapBase], synced [VendorDictionary] that
-  /// the [keys] are ordered by [String.compareTo].
-  ///
-  /// Since it may spend additional times for sorting [keys] before
-  /// attach into [SyncedVendorDictionary], it only available
-  /// for performing testes only.
-  @visibleForTesting
-  Future<SyncedVendorDictionary<V>> get syncAndSorted async {
-    List<DictionaryEntry<V>> entriesBuf = await entries.toList();
-    entriesBuf.sort((e1, e2) => e1.key.compareTo(e2.key));
-
-    return SyncedVendorDictionary._(
-        LinkedHashMap()..addEntries(entriesBuf), entriesBuf.length);
+    return SyncedVendorDictionary._(syncedMap, syncedEntries.length);
   }
 }
+
+int _keySort<V>(DictionaryEntry<V> a, DictionaryEntry<V> b) =>
+    a.key.compareTo(b.key);

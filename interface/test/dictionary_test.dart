@@ -40,7 +40,7 @@ void main() {
   late final SyncedVendorDictionary<Object?> syncedTestDict;
 
   setUpAll(() async {
-    syncedTestDict = await testDict.syncAndSorted;
+    syncedTestDict = await testDict.toSynced();
   });
 
   test("Stringify vendor dictionary", () {
