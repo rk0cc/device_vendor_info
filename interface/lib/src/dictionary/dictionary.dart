@@ -244,7 +244,7 @@ final class SyncedVendorDictionary<V> extends UnmodifiableMapBase<String, V> {
 extension VendorDictionarySynchronizer<V> on VendorDictionary<V> {
   /// Obtain [UnmodifiableMapBase], synced [VendorDictionary] with
   /// exact same key-value pair stored in this dictionary.
-  /// 
+  ///
   /// By default, it should be returned unsorted [Map] based
   /// [SyncedVendorDictionary]. To enable sorting order of [Map],
   /// [sortEntries] should be defined, unless it called during testing
