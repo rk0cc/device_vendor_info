@@ -11,7 +11,7 @@ env:
   working-directory: './interface'
 jobs:
   genfile:
-    name: Generate file
+    name: Generate file and format
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -26,6 +26,9 @@ jobs:
       - name: Run build file
         working-directory: ${{ env.working-directory }}
         run: dart run build_runner build --delete-conflicting-outputs
+      - name: Formatting
+        working-directory: ${{ env.working-directory }}
+        run: dart format .
       - name: Assign Git configurations
         run: |
           git config --local user.name "rk0cc"
