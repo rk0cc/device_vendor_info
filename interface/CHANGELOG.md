@@ -1,3 +1,7 @@
+## 4.1.1
+
+* Documentation fix
+
 ## 4.1.0
 
 * Remove `synced` and `syncAndSorted` getter. These features have been replaced by `toSynced()`.

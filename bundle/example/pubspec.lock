@@ -39,31 +39,31 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "1.0.0-beta.1"
+    version: "1.0.0-beta.2"
   device_vendor_info_interface:
     dependency: transitive
     description:
       name: device_vendor_info_interface
-      sha256: b3feb4bfe0ff834c8e6a557e267447b1d603367fd3ddab4372bda5d559314299
+      sha256: feb36e25c64ca53d5b93ce3f10c8daa918fea0e78a8771addb54effa101da934
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.0"
+    version: "4.1.0"
   device_vendor_info_unix:
     dependency: transitive
     description:
       name: device_vendor_info_unix
-      sha256: fe121d34d238c4c0ff6596a7b4c345e577fd73cae4a222459c8010252ac6d7d2
+      sha256: d1cfab7f9396525ebf9a5bbe2a1175fe40e13e77bb475a388bc8f42c2e684a40
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.0-beta.1"
+    version: "1.0.0-beta.2"
   device_vendor_info_windows:
     dependency: transitive
     description:
       name: device_vendor_info_windows
-      sha256: df55ab1d92c7848a94ef6ea1ae35c6cddfceab87257e5259ef0d3064983015c4
+      sha256: c71964b142e58f1f48b7d94fe992ad8570403284864d1a33edcb3eafc899b448
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.0-beta.1"
+    version: "1.0.0-beta.3"
   ffi:
     dependency: transitive
     description:

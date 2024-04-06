@@ -94,7 +94,7 @@ abstract base class ProductiveDeviceVendorInfoLoader
   @protected
   Future<SystemInfo> fetchSystemInfo(VendorDictionary dictionary);
 
-  /// Obtain [DeviceDictionary] for finding entity of
+  /// Obtain [VendorDictionary] for finding entity of
   /// hardware information.
   ///
   /// All extended classes **must define** it as `final` property scope
