@@ -1,3 +1,7 @@
+## 1.0.0
+
+* Stable release of v1
+
 ## 1.0.0-beta.2
 
 * Uses v4 interface API

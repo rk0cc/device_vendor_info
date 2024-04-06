@@ -1,3 +1,7 @@
+## 1.0.0
+
+* First stable release with newer interface.
+
 ## 1.0.0-beta.2
 
 * Upgrade to v4 interface.

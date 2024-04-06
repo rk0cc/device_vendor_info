@@ -32,7 +32,7 @@ Future<Map<String, dynamic>> exportRawVendorInfoToJson() async {
   final DeviceVendorInfoLoader loader = DeviceVendorInfo.instance;
 
   if (loader is ProductiveDeviceVendorInfoLoader) {
-    return loader.dictionary.synced;
+    return loader.dictionary.toSynced();
   }
 
   return const <String, dynamic>{};

@@ -1,6 +1,6 @@
 name: device_vendor_info_windows
 description: Windows implementation of hardware vendor information in Flutter.
-version: 1.0.0-beta.3
+version: 1.0.0
 homepage: https://github.com/rk0cc/device_vendor_info
 repository: https://github.com/rk0cc/device_vendor_info/tree/main/windows
 environment: 
@@ -11,7 +11,7 @@ dependencies:
     sdk: flutter
   meta: ^1.10.0
   win32_registry: ^1.1.2
-  device_vendor_info_interface: ^4.0.0
+  device_vendor_info_interface: ^4.1.1
   async: ^2.11.0
 dev_dependencies:
   flutter_lints: ^3.0.1
