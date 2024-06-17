@@ -15,8 +15,6 @@ dependencies:
   path: ^1.8.3
 dev_dependencies:
   flutter_lints: ">=3.0.1 <5.0.0"
-device_vendor_info_interface:
-    path: "../interface"
 platforms:
   macos:
   linux:
