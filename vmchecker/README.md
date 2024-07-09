@@ -1,0 +1,1 @@
+# FFI plugin for detect hypervisor in device_vendor_info.

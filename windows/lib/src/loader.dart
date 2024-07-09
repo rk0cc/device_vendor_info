@@ -60,4 +60,10 @@ final class WindowsDeviceVendorInfoLoader
         productName: await dictionary["SystemProductName"] as String?,
         version: await dictionary["SystemVersion"] as String?);
   }
+  
+  @override
+  Future<bool> fetchIsVirtualPlatform() {
+    // TODO: implement fetchIsVirtualPlatform
+    throw UnimplementedError();
+  }
 }
