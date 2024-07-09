@@ -1,5 +1,5 @@
 name: device_vendor_info_vmchecker
-description: "Virtual platform detection plugin for device_vendor_info packages"
+description: Virtual platform detection plugin for device_vendor_info packages
 version: 1.0.0
 environment:
   sdk: '>=3.3.0 <4.0.0'
