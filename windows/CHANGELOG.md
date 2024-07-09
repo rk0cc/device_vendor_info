@@ -1,3 +1,7 @@
+## 2.0.0 
+
+* Add VM detection.
+
 ## 1.0.0
 
 * First stable release with newer interface.
