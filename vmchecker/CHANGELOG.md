@@ -1,3 +1,7 @@
+## 1.0.2
+
+* Fix result does not returned and change definition.
+
 ## 1.0.1
 
 * Package rename

@@ -1,6 +1,6 @@
 name: device_vendor_info
 description: Get hardware information (BIOS, Motherboard and System) into Flutter platform.
-version: 2.0.0
+version: 2.0.1
 homepage: https://github.com/rk0cc/device_vendor_info
 funding:
   - https://github.com/sponsors/rk0cc
@@ -16,8 +16,8 @@ dependencies:
     sdk: flutter
   meta: ^1.10.0
   device_vendor_info_interface: ^5.0.0
-  device_vendor_info_unix: ^2.0.0
-  device_vendor_info_windows: ^2.0.0
+  device_vendor_info_unix: ^2.0.1
+  device_vendor_info_windows: ^2.0.1
 dev_dependencies:
   flutter_test:
     sdk: flutter

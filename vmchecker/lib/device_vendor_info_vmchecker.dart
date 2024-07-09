@@ -6,7 +6,10 @@ import 'dart:isolate';
 import 'device_vendor_info_vmchecker_bindings_generated.dart';
 
 /// Check the platform where this program executed is under virtualized environment.
-Future<bool> isHypervisor() => Isolate.run(_bindings.is_hypervisor);
+/// 
+/// This may becomes false positive if the machines adapted type 1 hypervisor, which allows
+/// virtualization with physical hardware directly.
+Future<bool> isHypervisor() => Isolate.run(() => _bindings.is_hypervisor());
 
 const String _libName = 'device_vendor_info_vmchecker';
 

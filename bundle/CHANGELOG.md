@@ -1,3 +1,7 @@
+## 2.0.1
+
+* Fix vmchecker loading issue
+
 ## 2.0.0
 
 * Add virtualization detection.
