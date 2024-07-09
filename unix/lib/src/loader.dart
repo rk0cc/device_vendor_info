@@ -96,7 +96,7 @@ final class UnixDeviceVendorInfoLoader
         productName: productName,
         version: version);
   }
-  
+
   @override
   Future<bool> fetchIsVirtualPlatform() {
     return isHypervisor();
