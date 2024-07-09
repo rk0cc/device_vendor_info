@@ -1,3 +1,7 @@
+## 2.0.0
+
+* Add VM checker.
+
 ## 1.0.0
 
 * First stable release with newer interface.
