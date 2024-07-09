@@ -1,3 +1,7 @@
+## 5.0.0
+
+* Add virtual machine detection.
+
 ## 4.1.1
 
 * Documentation fix

@@ -51,6 +51,9 @@ abstract final class DeviceVendorInfoLoader {
 
   /// Extract system information.
   Future<SystemInfo> get systemInfo;
+
+  /// Indicate this host is executed in virtual machine or a container.
+  Future<bool> get isVirtualPlatform;
 }
 
 /// Productive (or release) version of [DeviceVendorInfoLoader] which
@@ -67,6 +70,7 @@ abstract base class ProductiveDeviceVendorInfoLoader
   final AsyncMemoizer<BiosInfo> _biosMemoizer = AsyncMemoizer();
   final AsyncMemoizer<BoardInfo> _boardMemoizer = AsyncMemoizer();
   final AsyncMemoizer<SystemInfo> _systemMemoizer = AsyncMemoizer();
+  final AsyncMemoizer<bool> _isVirtualPlatformMemorizer = AsyncMemoizer();
 
   /// Create instance of [ProductiveDeviceVendorInfoLoader].
   ///
@@ -93,6 +97,11 @@ abstract base class ProductiveDeviceVendorInfoLoader
   /// [SystemInfo] when calling [systemInfo].
   @protected
   Future<SystemInfo> fetchSystemInfo(VendorDictionary dictionary);
+
+  /// Obtain result of running in virtual platform, which should be
+  /// determined without using [dictionary].
+  @protected
+  Future<bool> fetchIsVirtualPlatform();
 
   /// Obtain [VendorDictionary] for finding entity of
   /// hardware information.
@@ -131,6 +140,11 @@ abstract base class ProductiveDeviceVendorInfoLoader
   @nonVirtual
   Future<SystemInfo> get systemInfo =>
       _systemMemoizer.runOnce(() => fetchSystemInfo(dictionary));
+
+  @override
+  @nonVirtual
+  Future<bool> get isVirtualPlatform =>
+      _isVirtualPlatformMemorizer.runOnce(fetchIsVirtualPlatform);
 }
 
 /// Another [DeviceVendorInfoLoader] that all data are defined already
@@ -178,6 +192,10 @@ base class MockDeviceVendorInfoLoader extends DeviceVendorInfoLoader {
   @mustCallSuper
   @override
   Future<SystemInfo> get systemInfo => Future.value(_systemInfo);
+
+  @nonVirtual
+  @override
+  Future<bool> get isVirtualPlatform async => false;
 }
 
 final class _DelayedMockDeviceVendorInfoLoader
