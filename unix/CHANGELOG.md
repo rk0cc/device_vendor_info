@@ -1,3 +1,7 @@
+## 2.0.1
+
+* Recreate vmchecker
+
 ## 2.0.0
 
 * Add VM checker.

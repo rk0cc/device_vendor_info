@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:device_vendor_info_interface/definitions.dart';
 import 'package:device_vendor_info_interface/interface.dart';
 import 'package:device_vendor_info_interface/release.dart';
-import 'package:device_vendor_info_vmchecker/vmchecker.dart';
+import 'package:device_vendor_info_vmchecker/device_vendor_info_vmchecker.dart';
 
 import 'dictionary.dart';
 
