@@ -1,4 +1,3 @@
-
 import 'dart:async';
 import 'dart:ffi';
 import 'dart:io';
@@ -26,4 +25,5 @@ final DynamicLibrary _dylib = () {
 }();
 
 /// The bindings to the native functions in [_dylib].
-final DeviceVendorInfoVmcheckerBindings _bindings = DeviceVendorInfoVmcheckerBindings(_dylib);
+final DeviceVendorInfoVmcheckerBindings _bindings =
+    DeviceVendorInfoVmcheckerBindings(_dylib);
