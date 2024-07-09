@@ -3,6 +3,7 @@ import 'dart:typed_data' show Uint8List;
 import 'package:device_vendor_info_interface/definitions.dart';
 import 'package:device_vendor_info_interface/interface.dart';
 import 'package:device_vendor_info_interface/release.dart';
+import 'package:device_vendor_info_vmchecker/vmchecker.dart';
 import 'package:win32_registry/win32_registry.dart';
 
 import 'dictionary.dart';
@@ -60,10 +61,9 @@ final class WindowsDeviceVendorInfoLoader
         productName: await dictionary["SystemProductName"] as String?,
         version: await dictionary["SystemVersion"] as String?);
   }
-  
+
   @override
   Future<bool> fetchIsVirtualPlatform() {
-    // TODO: implement fetchIsVirtualPlatform
-    throw UnimplementedError();
+    return isHypervisor();
   }
 }
