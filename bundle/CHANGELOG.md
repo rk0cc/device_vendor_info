@@ -1,3 +1,8 @@
+## 2.0.2
+
+* Recode `isVirtualized()` for better virtual machine detection.
+    * Original implementation will be renamed to `hasHypervisor()`.
+
 ## 2.0.1
 
 * Fix vmchecker loading issue
