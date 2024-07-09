@@ -5,4 +5,5 @@ There is a tree layout description for each subdirectories in root directory of 
 * `bundle`: A completed implementations of `device_vendor_info` which publicly exposed in pub.dev.
 * `interface`: Standard layout of object model and loader interface that it will be implemented in specific platform.
 * `unix`: Loader implementations in UNIX platform.
+* `vmchecker`: FFI plugin for checking program is executed under virtual machine or container.
 * `windows`: Loader implementations in Windows platform.
