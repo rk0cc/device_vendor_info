@@ -1,0 +1,3 @@
+LIBRARY vmchecker
+EXPORTS
+    is_hypervisor

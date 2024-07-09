@@ -34,8 +34,9 @@ final class _WindowsVendorDictionaryEntriesStream
                 value.data as String,
               RegistryValueType.stringArray =>
                 List.unmodifiable(value.data as List<String>) as List<String>,
-              RegistryValueType.binary => UnmodifiableUint8ListView(
-                  Uint8List.fromList(value.data as List<int>)),
+              RegistryValueType.binary =>
+                Uint8List.fromList(value.data as List<int>)
+                    .asUnmodifiableView(),
               RegistryValueType.none => null,
               _ => throw TypeError()
             });
