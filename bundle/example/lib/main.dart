@@ -60,6 +60,15 @@ class _DeviceInfoPageState extends State<DeviceInfoPage> {
         body: Column(children: [
           Expanded(
               child: ListView(children: [
+            _buildInfoWidget(context,
+                displayName: "Virtualization",
+                infoFetch: isVirtualized,
+                result: (info) => <ListTile>[
+                  ListTile(
+                    title: const Text("Virtualization"),
+                    trailing: Text(info ? "Yes" : "No"),
+                  )
+                ]),
             _buildInfoWidget<BiosInfo>(context,
                 displayName: "BIOS",
                 infoFetch: getBiosInfo,

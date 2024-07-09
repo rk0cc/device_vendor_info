@@ -1,3 +1,8 @@
+## 2.0.0
+
+* Add virtualization detection.
+* Increase minimum Flutter and Dart SDK version.
+
 ## 1.0.0
 
 * Stable release of v1

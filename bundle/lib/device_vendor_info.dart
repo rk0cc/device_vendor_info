@@ -17,6 +17,13 @@ Future<BoardInfo> getBoardInfo() => DeviceVendorInfo.instance.boardInfo;
 /// Direct callback for fetching [SystemInfo] from [DeviceVendorInfo.instance].
 Future<SystemInfo> getSystemInfo() => DeviceVendorInfo.instance.systemInfo;
 
+/// Determine this program executed under virtualized platform. (e.g. Virtual machine,
+/// container).
+/// 
+/// This result is not related with BIOS information that it does not appeared in 
+/// [exportRawVendorInfoToJson].
+Future<bool> isVirtualized() => DeviceVendorInfo.instance.isVirtualPlatform; 
+
 /// Get [BiosInfo] (`bios` key in [Map]), [BoardInfo] (`mother_board` key in [Map])
 /// and [SystemInfo] (`system` key in [Map]) into an unmodifiable [Map].
 Future<Map<String, dynamic>> exportVendorInfoToJson() async =>

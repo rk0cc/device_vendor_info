@@ -1,4 +1,4 @@
-#include "vmchecker.h"
+#include "device_vendor_info_vmchecker.h"
 
 // Determine the running platform is under hypervisor mode, which
 // denotes this program is executed inside of virtual machine or container

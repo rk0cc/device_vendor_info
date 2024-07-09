@@ -3,15 +3,15 @@
 # the plugin to fail to compile for some customers of the plugin.
 cmake_minimum_required(VERSION 3.10)
 
-project(vmchecker_library VERSION 1.0.0 LANGUAGES C)
+project(device_vendor_info_vmchecker_library VERSION 0.0.1 LANGUAGES C)
 
-add_library(vmchecker SHARED
-  "vmchecker.c"
+add_library(device_vendor_info_vmchecker SHARED
+  "device_vendor_info_vmchecker.c"
 )
 
-set_target_properties(vmchecker PROPERTIES
-  PUBLIC_HEADER vmchecker.h
-  OUTPUT_NAME "vmchecker"
+set_target_properties(device_vendor_info_vmchecker PROPERTIES
+  PUBLIC_HEADER device_vendor_info_vmchecker.h
+  OUTPUT_NAME "device_vendor_info_vmchecker"
 )
 
-target_compile_definitions(vmchecker PUBLIC DART_SHARED_LIB)
+target_compile_definitions(device_vendor_info_vmchecker PUBLIC DART_SHARED_LIB)

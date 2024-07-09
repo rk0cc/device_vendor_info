@@ -1,15 +1,15 @@
 # Run with `dart run ffigen --config ffigen.yaml`.
-name: VmcheckerBindings
+name: DeviceVendorInfoVmcheckerBindings
 description: |
-  Bindings for `src/vmchecker.h`.
+  Bindings for `src/device_vendor_info_vmchecker.h`.
 
   Regenerate bindings with `dart run ffigen --config ffigen.yaml`.
-output: 'lib/vmchecker_bindings_generated.dart'
+output: 'lib/device_vendor_info_vmchecker_bindings_generated.dart'
 headers:
   entry-points:
-    - 'src/vmchecker.h'
+    - 'src/device_vendor_info_vmchecker.h'
   include-directives:
-    - 'src/vmchecker.h'
+    - 'src/device_vendor_info_vmchecker.h'
 preamble: |
   // ignore_for_file: always_specify_types
   // ignore_for_file: camel_case_types
