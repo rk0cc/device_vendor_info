@@ -19,10 +19,10 @@ Future<SystemInfo> getSystemInfo() => DeviceVendorInfo.instance.systemInfo;
 
 /// Determine this program executed under virtualized platform. (e.g. Virtual machine,
 /// container).
-/// 
-/// This result is not related with BIOS information that it does not appeared in 
+///
+/// This result is not related with BIOS information that it does not appeared in
 /// [exportRawVendorInfoToJson].
-Future<bool> isVirtualized() => DeviceVendorInfo.instance.isVirtualPlatform; 
+Future<bool> isVirtualized() => DeviceVendorInfo.instance.isVirtualPlatform;
 
 /// Get [BiosInfo] (`bios` key in [Map]), [BoardInfo] (`mother_board` key in [Map])
 /// and [SystemInfo] (`system` key in [Map]) into an unmodifiable [Map].

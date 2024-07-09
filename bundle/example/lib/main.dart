@@ -64,11 +64,11 @@ class _DeviceInfoPageState extends State<DeviceInfoPage> {
                 displayName: "Virtualization",
                 infoFetch: isVirtualized,
                 result: (info) => <ListTile>[
-                  ListTile(
-                    title: const Text("Virtualization"),
-                    trailing: Text(info ? "Yes" : "No"),
-                  )
-                ]),
+                      ListTile(
+                        title: const Text("Virtualization"),
+                        trailing: Text(info ? "Yes" : "No"),
+                      )
+                    ]),
             _buildInfoWidget<BiosInfo>(context,
                 displayName: "BIOS",
                 infoFetch: getBiosInfo,
