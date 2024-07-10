@@ -4,7 +4,9 @@ library device_vendor_info;
 import 'package:device_vendor_info/testing.dart';
 import 'package:device_vendor_info_interface/interface.dart';
 import 'package:device_vendor_info_interface/release.dart';
+
 import 'src/instance.dart';
+import 'src/vm_suspect.dart';
 
 export 'package:device_vendor_info_interface/interface.dart'
     show BiosInfo, BoardInfo, SystemInfo;
@@ -48,23 +50,9 @@ Future<bool> isVirtualized() async {
     return false;
   }
 
-  const Set<(String, String)> vmSysManufactorModel = {
-    ("VMware, Inc.", "VMware Virtual Platform"),
-    ("innotek GmbH", "VirtualBox"),
-    ("Microsoft Corporation", "Virtual Machine"),
-    ("", "")
-  };
-
-  (String, String) sysInfoResult = await getSystemInfo()
-      .then((sys) => (sys.manufacturer ?? "", sys.productName ?? ""));
-
-  for (var vmSus in vmSysManufactorModel) {
-    if (vmSus == sysInfoResult) {
-      return true;
-    }
-  }
-
-  return false;
+  return getSystemInfo()
+      .then((sys) => (sys.manufacturer ?? "", sys.productName ?? ""))
+      .then(vmSysManufactureModel.contains);
 }
 
 /// Get [BiosInfo] (`bios` key in [Map]), [BoardInfo] (`mother_board` key in [Map])

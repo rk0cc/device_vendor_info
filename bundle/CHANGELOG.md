@@ -1,3 +1,8 @@
+## 2.0.3
+
+* Move VM suspect as internal code
+* Simply code
+
 ## 2.0.2
 
 * Recode `isVirtualized()` for better virtual machine detection.
