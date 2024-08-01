@@ -1,3 +1,6 @@
+#ifndef DEVICE_VENDOR_INFO_VMCHECKER_H
+#define DEVICE_VENDOR_INFO_VMCHECKER_H
+
 #include <stdbool.h>
 
 #if _WIN32 && defined(_MSC_VER)
@@ -17,3 +20,5 @@
 // denotes this program is executed inside of virtual machine or container
 // rather than a real, physical machine.
 FFI_PLUGIN_EXPORT bool is_hypervisor();
+
+#endif
