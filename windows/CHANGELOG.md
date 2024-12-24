@@ -1,3 +1,7 @@
+## 2.0.2+1
+
+* Fix constraint issue in vmcheker
+
 ## 2.0.2
 
 * Change SDK constraint to `^3.6.0` for monorepo support
