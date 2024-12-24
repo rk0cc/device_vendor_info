@@ -1,3 +1,7 @@
+## 2.0.4
+
+* Change SDK constraint to `^3.6.0` for monorepo support
+
 ## 2.0.3
 
 * Move VM suspect as internal code

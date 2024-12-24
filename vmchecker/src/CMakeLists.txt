@@ -3,7 +3,7 @@
 # the plugin to fail to compile for some customers of the plugin.
 cmake_minimum_required(VERSION 3.10)
 
-project(device_vendor_info_vmchecker_library VERSION 0.0.1 LANGUAGES C)
+project(device_vendor_info_vmchecker_library VERSION 1.0.2 LANGUAGES C)
 
 add_library(device_vendor_info_vmchecker SHARED
   "device_vendor_info_vmchecker.c"

@@ -1,3 +1,7 @@
+## 2.0.2
+
+* Change SDK constraint to `^3.6.0` for monorepo support
+
 ## 2.0.1
 
 * Recreate vmchecker

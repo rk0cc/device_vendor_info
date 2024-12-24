@@ -1,19 +1,19 @@
 name: device_vendor_info_vmchecker
 description: Virtual platform detection plugin for device_vendor_info packages
-version: 1.0.2
+version: 1.0.3
 homepage: https://github.com/rk0cc/device_vendor_info
 repository: https://github.com/rk0cc/device_vendor_info/tree/main/vmchecker
 environment:
-  sdk: '>=3.3.0 <4.0.0'
-  flutter: '>=3.19.0'
+  sdk: ^3.6.0
+  flutter: '>=3.27.0'
+resolution: workspace
 dependencies:
   flutter:
     sdk: flutter
-  plugin_platform_interface: ^2.0.2
 dev_dependencies:
-  ffi: ^2.1.0
-  ffigen: ^11.0.0
-  flutter_lints: ^4.0.0
+  ffi: ^2.1.3
+  ffigen: ^16.0.0
+  flutter_lints: ^5.0.0
 flutter:
   plugin:
     platforms:

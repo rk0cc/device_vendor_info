@@ -1,3 +1,7 @@
+## 5.0.1
+
+* Change Dart SDK constaint to `^3.6.0` to enable monorepo support.
+
 ## 5.0.0
 
 * Add virtual machine detection.
