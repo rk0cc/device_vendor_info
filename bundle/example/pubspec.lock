@@ -36,9 +36,10 @@ packages:
   device_vendor_info:
     dependency: "direct main"
     description:
-      path: ".."
-      relative: true
-    source: path
+      name: device_vendor_info
+      sha256: aa3ff4476f7338f312bdc3e61b45213a2e78f301241e6cb1b2e739653f79906e
+      url: "https://pub.dev"
+    source: hosted
     version: "2.0.4"
   device_vendor_info_interface:
     dependency: transitive

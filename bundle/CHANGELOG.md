@@ -1,3 +1,7 @@
+## 2.0.4+1
+
+* Fix incorrect `vmchecker` transitive constraint in `windows` dependencies.
+
 ## 2.0.4
 
 * Change SDK constraint to `^3.6.0` for monorepo support
