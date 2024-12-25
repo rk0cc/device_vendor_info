@@ -1,3 +1,8 @@
+## 1.1.0
+
+* Mark binding class final, which not intended to extend in design.
+* Make `DynamicLibrary` opened on demanded.
+
 ## 1.0.3
 
 * Change SDK constraint to `^3.6.0` for monorepo support
