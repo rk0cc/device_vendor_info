@@ -5,16 +5,9 @@ import 'dart:isolate';
 
 import 'device_vendor_info_vmchecker_bindings_generated.dart';
 
-/// Check the platform where this program executed is under virtualized environment.
-/// 
-/// This may becomes false positive if the machines adapted type 1 hypervisor, which allows
-/// virtualization with physical hardware directly.
-Future<bool> isHypervisor() => Isolate.run(() => _bindings.is_hypervisor());
-
 const String _libName = 'device_vendor_info_vmchecker';
 
-/// The dynamic library in which the symbols for [DeviceVendorInfoVmcheckerBindings] can be found.
-final DynamicLibrary _dylib = () {
+DynamicLibrary _openLibrary() {
   if (Platform.isMacOS || Platform.isIOS) {
     return DynamicLibrary.open('$_libName.framework/$_libName');
   }
@@ -25,8 +18,18 @@ final DynamicLibrary _dylib = () {
     return DynamicLibrary.open('$_libName.dll');
   }
   throw UnsupportedError('Unknown platform: ${Platform.operatingSystem}');
-}();
+}
 
-/// The bindings to the native functions in [_dylib].
-final DeviceVendorInfoVmcheckerBindings _bindings =
-    DeviceVendorInfoVmcheckerBindings(_dylib);
+/// Check the platform where this program executed is under virtualized environment.
+///
+/// This may becomes false positive if the machines adapted type 1 hypervisor, which allows
+/// virtualization with physical hardware directly.
+Future<bool> isHypervisor() => Isolate.run(() {
+      final DynamicLibrary lib = _openLibrary();
+
+      try {
+        return DeviceVendorInfoVmcheckerBindings(lib).is_hypervisor();
+      } finally {
+        lib.close();
+      }
+    });
