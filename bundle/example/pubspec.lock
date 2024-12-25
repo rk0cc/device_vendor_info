@@ -36,11 +36,10 @@ packages:
   device_vendor_info:
     dependency: "direct main"
     description:
-      name: device_vendor_info
-      sha256: aa3ff4476f7338f312bdc3e61b45213a2e78f301241e6cb1b2e739653f79906e
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.4"
+      path: ".."
+      relative: true
+    source: path
+    version: "2.0.4+1"
   device_vendor_info_interface:
     dependency: transitive
     description:
@@ -69,10 +68,10 @@ packages:
     dependency: transitive
     description:
       name: device_vendor_info_windows
-      sha256: "78649677bc27c4fbe5654d63b8224742e8b3cc611648e59f22d30db16c84978f"
+      sha256: "2c802aacb52b8aac5e7b8daf747dae2cf85b388757b73dde14b575bc38f22579"
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.2"
+    version: "2.0.2+1"
   ffi:
     dependency: transitive
     description:
