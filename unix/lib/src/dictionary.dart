@@ -18,14 +18,14 @@ final class _UnixVendorDictionaryEntriesStream
       return;
     }
 
-    bool isReadable(String mode) =>
-        RegExp(r"(?:r(?:w|-)(?:x|-)){3}$", caseSensitive: true, dotAll: false)
-            .hasMatch(mode);
+    bool isReadable(int mode) => [mode >> 6, mode >> 3, mode]
+        .map((e) => e & 0x7)
+        .every((permission) => permission >= 0x4);
 
     final Stream<File> dmiFiles = dmi
         .list(followLinks: false)
         .where((entity) =>
-            entity is File && isReadable(entity.statSync().modeString()))
+            entity is File && isReadable(entity.statSync().mode & 0x1FF))
         .cast<File>();
 
     await for (File f in dmiFiles) {
