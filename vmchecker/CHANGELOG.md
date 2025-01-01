@@ -1,3 +1,7 @@
+## (next)
+
+* Apply bitwise for verify readability.
+
 ## 1.1.0
 
 * Mark binding class final, which not intended to extend in design.
