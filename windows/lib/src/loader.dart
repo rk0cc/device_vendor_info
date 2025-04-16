@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:typed_data' show Uint8List;
 
 import 'package:device_vendor_info_interface/definitions.dart';
@@ -33,33 +34,82 @@ final class WindowsDeviceVendorInfoLoader
   /// Create new instance for fetching hardward information.
   WindowsDeviceVendorInfoLoader() : dictionary = WindowsVendorDictionary();
 
+  static Future<void> _guardAssign(FutureOr<void> Function() assigner) async {
+    try {
+      assigner();
+    } on InvalidDictionaryKeyError {
+      // Do nothing
+    }
+  }
+
   @override
   Future<BiosInfo> fetchBiosInfo(VendorDictionary dictionary) async {
-    String? releaseDateString = await dictionary["BIOSReleaseDate"] as String?;
+    String? releaseDateString, vendor, version;
+
+    await Future.wait([
+      _guardAssign(() async {
+        releaseDateString = await dictionary["BIOSReleaseDate"];
+      }),
+      _guardAssign(() async {
+        vendor = await dictionary["BIOSVendor"];
+      }),
+      _guardAssign(() async {
+        version = await dictionary["BIOSVersion"];
+      })
+    ]);
 
     return BiosInfo(
-        vendor: await dictionary["BIOSVendor"] as String?,
-        version: await dictionary["BIOSVersion"] as String?,
+        vendor: vendor,
+        version: version,
         releaseDate: releaseDateString == null
             ? null
-            : biosDateFormat.parse(releaseDateString));
+            : biosDateFormat.parse(releaseDateString as String));
   }
 
   @override
   Future<BoardInfo> fetchBoardInfo(VendorDictionary dictionary) async {
+    String? manufacturer, productName, version;
+
+    await Future.wait([
+      _guardAssign(() async {
+        manufacturer = await dictionary["BaseBoardManufacturer"];
+      }),
+      _guardAssign(() async {
+        productName = await dictionary["BaseBoardProduct"];
+      }),
+      _guardAssign(() async {
+        version = await dictionary["BaseBoardVersion"];
+      })
+    ]);
+
     return BoardInfo(
-        manufacturer: await dictionary["BaseBoardManufacturer"] as String?,
-        productName: await dictionary["BaseBoardProduct"] as String?,
-        version: await dictionary["BaseBoardVersion"] as String?);
+        manufacturer: manufacturer, productName: productName, version: version);
   }
 
   @override
   Future<SystemInfo> fetchSystemInfo(VendorDictionary dictionary) async {
+    String? family, manufacturer, productName, version;
+
+    await Future.wait([
+      _guardAssign(() async {
+        manufacturer = await dictionary["SystemManufacturer"];
+      }),
+      _guardAssign(() async {
+        productName = await dictionary["SystemProductName"];
+      }),
+      _guardAssign(() async {
+        version = await dictionary["SystemVersion"];
+      }),
+      _guardAssign(() async {
+        family = await dictionary["SystemFamily"];
+      })
+    ]);
+    
     return SystemInfo(
-        family: await dictionary["SystemFamily"] as String?,
-        manufacturer: await dictionary["SystemManufacturer"] as String?,
-        productName: await dictionary["SystemProductName"] as String?,
-        version: await dictionary["SystemVersion"] as String?);
+        family: family,
+        manufacturer: manufacturer,
+        productName: productName,
+        version: version);
   }
 
   @override
