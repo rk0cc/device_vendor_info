@@ -36,7 +36,7 @@ final class WindowsDeviceVendorInfoLoader
 
   static Future<void> _guardAssign(FutureOr<void> Function() assigner) async {
     try {
-      assigner();
+      await assigner();
     } on InvalidDictionaryKeyError {
       // Do nothing
     }
