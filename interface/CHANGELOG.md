@@ -1,3 +1,7 @@
+## 5.1.0
+
+* Change Dart SDK constraint to `^3.8.0` along with serval dependencies.
+
 ## 5.0.1
 
 * Change Dart SDK constaint to `^3.6.0` to enable monorepo support.

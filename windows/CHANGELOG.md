@@ -1,3 +1,8 @@
+## 2.1.0
+
+* Bump `win32_registry` to `^2.1.0` with code changes on handling registry values.
+* Change Dart SDK constraint to `^3.8.0`
+
 ## 2.0.2+1
 
 * Fix constraint issue in vmcheker

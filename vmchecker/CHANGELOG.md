@@ -1,6 +1,6 @@
-## (next)
+## 1.2.0
 
-* Apply bitwise for verify readability.
+* Change Dart SDK constraint to `^3.8.0`.
 
 ## 1.1.0
 

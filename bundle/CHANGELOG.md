@@ -1,3 +1,9 @@
+## 2.1.0
+
+* Change Dart SDK constraint to `^3.8.0`.
+* Windows
+    * Migrate `win32_registry` to `^2.1.0`
+
 ## 2.0.4+1
 
 * Fix incorrect `vmchecker` transitive constraint in `windows` dependencies.

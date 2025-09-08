@@ -1,3 +1,7 @@
+## 2.1.0
+
+* * Change Dart SDK constraint to `^3.8.0`.
+
 ## 2.0.2
 
 * Change SDK constraint to `^3.6.0` for monorepo support
