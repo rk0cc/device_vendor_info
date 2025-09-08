@@ -10,36 +10,35 @@ final class _WindowsVendorDictionaryEntriesStream
     extends VendorDictionaryEntriesStreamBase<Object?> {
   const _WindowsVendorDictionaryEntriesStream();
 
-  Future<RegistryKey> _openRegistry() =>
-      Isolate.run(() => Registry.openPath(RegistryHive.localMachine,
-          path: r"HARDWARE\DESCRIPTION\System\BIOS",
-          desiredAccessRights: AccessRights.readOnly));
+  Future<RegistryKey> _openRegistry() => Isolate.run(
+    () => Registry.openPath(
+      RegistryHive.localMachine,
+      path: r"HARDWARE\DESCRIPTION\System\BIOS",
+      desiredAccessRights: AccessRights.readOnly,
+    ),
+  );
 
   @override
-  Future<void> generateContent(DictionaryEntryStreamAdder<Object?> add,
-      DictionaryEntryStreamThrower addError) async {
+  Future<void> generateContent(
+    DictionaryEntryStreamAdder<Object?> add,
+    DictionaryEntryStreamThrower addError,
+  ) async {
     RegistryKey k = await _openRegistry();
 
     try {
-      for (var value in k.values) {
-        add(
-            value.name,
-            switch (value.type) {
-              RegistryValueType.int32 ||
-              RegistryValueType.int64 =>
-                value.data as int,
-              RegistryValueType.string ||
-              RegistryValueType.unexpandedString ||
-              RegistryValueType.link =>
-                value.data as String,
-              RegistryValueType.stringArray =>
-                List.unmodifiable(value.data as List<String>) as List<String>,
-              RegistryValueType.binary =>
-                Uint8List.fromList(value.data as List<int>)
-                    .asUnmodifiableView(),
-              RegistryValueType.none => null,
-              _ => throw TypeError()
-            });
+      for (var regVal in k.values) {
+        add(regVal.name, switch (regVal) {
+          Int32Value(name: String _, value: int intVal) ||
+          Int64Value(name: String _, value: int intVal) => intVal,
+          StringValue(name: String _, value: String strVal) ||
+          UnexpandedStringValue(name: String _, value: String strVal) ||
+          LinkValue(name: String _, value: String strVal) => strVal,
+          StringArrayValue(name: String _, value: List<String> stAVal) =>
+            List.unmodifiable(stAVal),
+          BinaryValue(name: String _, value: Uint8List binVal) =>
+            Uint8List.fromList(binVal as List<int>).asUnmodifiableView(),
+          NoneValue(name: String _) => null,
+        });
       }
     } finally {
       k.close();
