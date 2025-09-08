@@ -12,12 +12,6 @@ jobs:
     env:
       working-directory: './bundle'
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        sdkver:
-          - '3.x'
-          - '3.27.x'
     steps:
       - name: Checkout
         uses: actions/checkout@v5
@@ -25,7 +19,7 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: stable
-          flutter-version: ${{ matrix.sdkver }}
+          flutter-version: '3.x'
       - name: Get dependencies
         working-directory: ${{ env.working-directory }}
         run: flutter pub get
