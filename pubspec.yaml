@@ -1,9 +1,10 @@
 name: _
 publish_to: none
 environment:
-  sdk: ^3.6.0
+  sdk: ^3.8.0
 workspace:
   - bundle/
+  - example/
   - interface/
   - unix/
   - vmchecker/
