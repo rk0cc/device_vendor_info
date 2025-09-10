@@ -1,14 +1,14 @@
 name: device_vendor_info_example
 description: "Demo Flutter application for fetching hardware informations"
 publish_to: 'none'
-version: 2.1.0
+version: 2.1.0+1
 resolution: workspace
 environment:
   sdk: ^3.8.0
 dependencies:
   flutter:
     sdk: flutter
-  device_vendor_info: ^2.1.0
+  device_vendor_info: ^2.1.0+1
   intl: '>=0.20.0'
 dev_dependencies:
   flutter_lints: ^6.0.0

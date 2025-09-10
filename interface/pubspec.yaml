@@ -1,11 +1,11 @@
 name: device_vendor_info_interface
 description: Provide standard interface of hardware vendor information in Flutter.
-version: 5.1.0
+version: 5.1.0+1
 homepage: https://github.com/rk0cc/device_vendor_info
 repository: https://github.com/rk0cc/device_vendor_info/tree/main/interface
 environment: 
   sdk: ^3.8.0
-  flutter: '>=3.35.0'
+  flutter: '>=3.32.0'
 resolution: workspace
 dependencies:
   flutter:
