@@ -1,3 +1,7 @@
+## 5.1.0+1
+
+* Fix version constraints unaligned problem.
+
 ## 5.1.0
 
 * Change Dart SDK constraint to `^3.8.0` along with serval dependencies.

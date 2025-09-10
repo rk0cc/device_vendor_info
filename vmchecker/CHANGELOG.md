@@ -1,3 +1,7 @@
+## 1.2.0+1
+
+* Fix version constraints unaligned problem.
+
 ## 1.2.0
 
 * Change Dart SDK constraint to `^3.8.0`.

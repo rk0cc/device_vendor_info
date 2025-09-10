@@ -1,3 +1,7 @@
+## 2.1.0+1
+
+* Fix version constraints unaligned problem.
+
 ## 2.1.0
 
 * Bump `win32_registry` to `^2.1.0` with code changes on handling registry values.
