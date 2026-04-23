@@ -1,29 +1,25 @@
 name: device_vendor_info_interface
 description: Provide standard interface of hardware vendor information in Flutter.
-version: 5.1.0+1
+version: 5.1.1
 homepage: https://github.com/rk0cc/device_vendor_info
 repository: https://github.com/rk0cc/device_vendor_info/tree/main/interface
 environment: 
-  sdk: ^3.8.0
-  flutter: '>=3.32.0'
+  sdk: ^3.10.0
 resolution: workspace
 dependencies:
-  flutter:
-    sdk: flutter
-  meta: ^1.15.0
-  json_annotation: ^4.9.0
+  meta: ^1.17.0
+  json_annotation: ^4.11.0
   intl: '>=0.20.0 <1.0.0'
   async: ^2.13.0
 dev_dependencies:
-  flutter_test:
-    sdk: flutter
-  flutter_lints: ^6.0.0
+  lints: ^6.1.0
   build_runner: ^2.8.0
-  json_serializable: ^6.11.1
+  json_serializable: ^6.13.0
   enough_convert:
     git:
       url: https://github.com/rk0cc/enough_convert.git
       ref: 99b2e6b8477ab2a1af5731501156f2d5a98c4188
+  test: ^1.31.0
 platforms:
   linux:
   macos:

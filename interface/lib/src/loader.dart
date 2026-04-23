@@ -3,8 +3,6 @@ import 'dart:io';
 import 'dart:math' show Random;
 
 import 'package:async/async.dart';
-import 'package:flutter/foundation.dart'
-    show TargetPlatform, defaultTargetPlatform;
 import 'package:meta/meta.dart';
 
 import 'dictionary/dictionary.dart';
@@ -32,14 +30,10 @@ abstract final class DeviceVendorInfoLoader {
   /// Linux only. Invoke other platform result to throw
   /// [UnsupportedError].
   DeviceVendorInfoLoader() {
-    switch (defaultTargetPlatform) {
-      case TargetPlatform.linux:
-      case TargetPlatform.macOS:
-      case TargetPlatform.windows:
-        break;
-      default:
-        throw UnsupportedError(
-            "Current target platform may not offeres hardware information data");
+    if (!(Platform.isLinux || Platform.isMacOS || Platform.isWindows)) {
+      throw UnsupportedError(
+        "Current target platform may not offeres hardware information data",
+      );
     }
   }
 
@@ -163,10 +157,12 @@ base class MockDeviceVendorInfoLoader extends DeviceVendorInfoLoader {
   /// returns [identical] result to simulate workflow of
   /// [DeviceVendorInfoLoader].
   MockDeviceVendorInfoLoader(
-      BiosInfo biosInfo, BoardInfo boardInfo, SystemInfo systemInfo)
-      : _biosInfo = biosInfo,
-        _boardInfo = boardInfo,
-        _systemInfo = systemInfo;
+    BiosInfo biosInfo,
+    BoardInfo boardInfo,
+    SystemInfo systemInfo,
+  ) : _biosInfo = biosInfo,
+      _boardInfo = boardInfo,
+      _systemInfo = systemInfo;
 
   /// Assign [biosInfo], [boardInfo] and [systemInfo] with random
   /// generated delay for more realistic emulation on fetching
@@ -177,9 +173,12 @@ base class MockDeviceVendorInfoLoader extends DeviceVendorInfoLoader {
   /// milliseconds. Hence, applying negative [Duration] or [initialDelay] is greater than
   /// [latestResponse] will throw [ArgumentError].
   factory MockDeviceVendorInfoLoader.simulateDelay(
-      BiosInfo biosInfo, BoardInfo boardInfo, SystemInfo systemInfo,
-      {Duration initialDelay,
-      Duration latestResponse}) = _DelayedMockDeviceVendorInfoLoader;
+    BiosInfo biosInfo,
+    BoardInfo boardInfo,
+    SystemInfo systemInfo, {
+    Duration initialDelay,
+    Duration latestResponse,
+  }) = _DelayedMockDeviceVendorInfoLoader;
 
   @mustCallSuper
   @override
@@ -203,13 +202,17 @@ final class _DelayedMockDeviceVendorInfoLoader
   late final Duration Function() _generateDelayDuration;
 
   _DelayedMockDeviceVendorInfoLoader(
-      super.biosInfo, super.boardInfo, super.systemInfo,
-      {Duration initialDelay = const Duration(milliseconds: 250),
-      Duration latestResponse = const Duration(seconds: 1),
-      int? seed}) {
+    super.biosInfo,
+    super.boardInfo,
+    super.systemInfo, {
+    Duration initialDelay = const Duration(milliseconds: 250),
+    Duration latestResponse = const Duration(seconds: 1),
+    int? seed,
+  }) {
     if ([initialDelay, latestResponse].any((element) => element.isNegative)) {
       throw ArgumentError(
-          "Initial delay or latest response cannot be negative duration");
+        "Initial delay or latest response cannot be negative duration",
+      );
     }
 
     if (initialDelay > latestResponse) {

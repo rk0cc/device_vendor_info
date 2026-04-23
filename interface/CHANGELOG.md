@@ -1,3 +1,8 @@
+## 5.1.1
+
+* Bump Dart SDK to `^3.10.0` for `meta: ^1.17.0`
+* Cease Flutter dependencies
+
 ## 5.1.0+1
 
 * Fix version constraints unaligned problem.

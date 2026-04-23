@@ -3,7 +3,7 @@ import 'dart:typed_data';
 
 import 'package:device_vendor_info_interface/collections.dart';
 import 'package:enough_convert/big5.dart';
-import 'package:flutter_test/flutter_test.dart';
+import 'package:test/test.dart';
 
 final class TestVendorDictionaryEntriesStream
     extends VendorDictionaryEntriesStreamBase<Object?> {
@@ -13,7 +13,7 @@ final class TestVendorDictionaryEntriesStream
     yield null;
     yield 1;
     yield math.pi;
-    yield <int>[67, 39, 53];
+    yield <int>[67 /* SIX-SEVEN = "U R AN IDIOT" in Cantonese */, 39, 53];
     yield "Foo";
     yield Uint8List.fromList(big5.encode("測試"));
   }
