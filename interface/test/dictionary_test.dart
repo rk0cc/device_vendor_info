@@ -19,8 +19,10 @@ final class TestVendorDictionaryEntriesStream
   }
 
   @override
-  Future<void> generateContent(DictionaryEntryStreamAdder<Object?> add,
-      DictionaryEntryStreamThrower addError) async {
+  Future<void> generateContent(
+    DictionaryEntryStreamAdder<Object?> add,
+    DictionaryEntryStreamThrower addError,
+  ) async {
     for (var element in mockValues().indexed) {
       add("${element.$1}", element.$2);
     }
@@ -45,9 +47,11 @@ void main() {
 
   test("Stringify vendor dictionary", () {
     expect(
-        syncedTestDict.toString(),
-        equals(
-            "{0: null, 1: 1, 2: ${math.pi}, 3: [67, 39, 53], 4: Foo, 5: [180, 250, 184, 213]}"));
+      syncedTestDict.toString(),
+      equals(
+        "{0: null, 1: 1, 2: ${math.pi}, 3: [67, 39, 53], 4: Foo, 5: [180, 250, 184, 213]}",
+      ),
+    );
   });
   group("Accessing dictionary:", () {
     group("Ensure no return null if key unexisted", () {
@@ -77,16 +81,19 @@ void main() {
   group("Vendor dictionary altering:", () {
     test("Mapping", () async {
       expect(
-          await testDict
-              .map<dynamic>((key, value) => DictionaryEntry(key, "$value"))
-              .values
-              .every((element) => element is String),
-          isTrue);
+        await testDict
+            .map<dynamic>((key, value) => DictionaryEntry(key, "$value"))
+            .values
+            .every((element) => element is String),
+        isTrue,
+      );
     });
 
     test("Selecting", () async {
-      expect(await testDict.where((key, value) => value != null).length,
-          equals(5));
+      expect(
+        await testDict.where((key, value) => value != null).length,
+        equals(5),
+      );
       expect(await testDict.whereValueType<List<int>>().length, equals(2));
     });
 
@@ -96,17 +103,23 @@ void main() {
       }
 
       expect(
-          () => streamAction<int>(
-              VendorDictionary.fromMap(const {"foo": 1, "bar": 2})),
-          returnsNormally);
+        () => streamAction<int>(
+          VendorDictionary.fromMap(const {"foo": 1, "bar": 2}),
+        ),
+        returnsNormally,
+      );
       expect(
-          () => streamAction<num>(
-              VendorDictionary.fromMap(const {"foo": 0xA, "bar": math.sqrt2})),
-          returnsNormally);
+        () => streamAction<num>(
+          VendorDictionary.fromMap(const {"foo": 0xA, "bar": math.sqrt2}),
+        ),
+        returnsNormally,
+      );
       expect(
-          () => streamAction<String>(
-              VendorDictionary.fromMap(const {"foo": "Hi", "bar": false})),
-          throwsA(isA<TypeError>()));
+        () => streamAction<String>(
+          VendorDictionary.fromMap(const {"foo": "Hi", "bar": false}),
+        ),
+        throwsA(isA<TypeError>()),
+      );
     });
   });
 }
