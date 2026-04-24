@@ -1,7 +1,7 @@
 # Hardware information getter in Flutter environment
 
 <p align="center">
-    <a link="https://pub.dev/packages/device_vendor_info"><img alt="Pub Version" src="https://img.shields.io/pub/v/device_vendor_info?style=flat-square&logo=flutter"/></a>
+    <a link="https://pub.dev/packages/device_vendor_info"><img alt="Pub Version" src="https://img.shields.io/pub/v/device_vendor_info?style=flat-square&logo=dart"/></a>
 </p>
 
 This package offers additional hardware informations regarding on BIOS, motherboard and system that it enables software to allow/restrict features to specific vendors.
@@ -21,11 +21,8 @@ dependencies:
 
 ```dart
 import 'package:device_vendor_info/device_vendor_info.dart';
-import 'package:flutter/widgets.dart';
 
 Future<void> main() async {
-    WidgetsFlutterBinding.ensureInitialized();
-
     final bios = await getBiosInfo();
     print(bios.vendor);
 }
@@ -33,7 +30,7 @@ Future<void> main() async {
 
 ### Testing
 
-To run testes with `DeviceVendorInfo`, `overrideCorrectTargetPlatform` must be invoked in `setUpAll` before all testes. Then, attach `MockDeviceVendorInfoLoader` into `DeviceVendorInfo.instance`. Otherwise the incoming testes will throws `UnsupportedError` immediately.
+Simply attach `MockDeviceVendorInfoLoader` into `DeviceVendorInfo.instance`.
 
 ```dart
 // Specify testing platform to prevent causing test failed when running on unsupport platform accidentally.
@@ -46,9 +43,6 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
     setupAll(() {
-        // Call it first
-        overrideCorrectTargetPlatform();
-
         // Change the instance to mock loader instead of automatically uses produtive loader.
         DeviceVendorInfo.instance = MockDeviceVendorInfoLoader(
           BiosInfo(vendor: "Generic vendor", version: "v1.23", releaseDate: DateTime(2023, 2, 21)),

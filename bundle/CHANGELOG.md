@@ -1,3 +1,10 @@
+## 3.0.0
+
+* Bump `win32_registry` to `^3.0.1` with major API changes applied for windows submodule.
+* Ship hook implementation of `vmchecker` module.
+    * Minimum Dart SDK becomes `^3.10.0` due to hooks implementations.
+* Cease Flutter dependencies.
+
 ## 2.1.0+1
 
 * Fix version constraints unaligned problem.

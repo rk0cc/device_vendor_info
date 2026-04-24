@@ -61,7 +61,7 @@ Future<Map<String, dynamic>> exportVendorInfoToJson() async =>
     Map.unmodifiable(<String, dynamic>{
       "bios": await getBiosInfo().then((value) => value.toJson()),
       "mother_board": await getBoardInfo().then((value) => value.toJson()),
-      "system": await getSystemInfo().then((value) => value.toJson())
+      "system": await getSystemInfo().then((value) => value.toJson()),
     });
 
 /// Return original hardware metadata into [String] key JSON
