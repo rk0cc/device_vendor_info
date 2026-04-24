@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'dart:isolate';
-import 'dart:typed_data';
 
 import 'package:device_vendor_info_interface/collections.dart';
 import 'package:meta/meta.dart';
@@ -11,10 +10,9 @@ final class _WindowsVendorDictionaryEntriesStream
   const _WindowsVendorDictionaryEntriesStream();
 
   Future<RegistryKey> _openRegistry() => Isolate.run(
-    () => Registry.openPath(
-      RegistryHive.localMachine,
-      path: r"HARDWARE\DESCRIPTION\System\BIOS",
-      desiredAccessRights: AccessRights.readOnly,
+    () => LOCAL_MACHINE.open(
+      r"HARDWARE\DESCRIPTION\System\BIOS",
+      config: RegistryOpenConfig(access: RegistryAccess.read),
     ),
   );
 
@@ -27,17 +25,16 @@ final class _WindowsVendorDictionaryEntriesStream
 
     try {
       for (var regVal in k.values) {
-        add(regVal.name, switch (regVal) {
-          Int32Value(name: String _, value: int intVal) ||
-          Int64Value(name: String _, value: int intVal) => intVal,
-          StringValue(name: String _, value: String strVal) ||
-          UnexpandedStringValue(name: String _, value: String strVal) ||
-          LinkValue(name: String _, value: String strVal) => strVal,
-          StringArrayValue(name: String _, value: List<String> stAVal) =>
-            List.unmodifiable(stAVal),
-          BinaryValue(name: String _, value: Uint8List binVal) =>
-            Uint8List.fromList(binVal as List<int>).asUnmodifiableView(),
-          NoneValue(name: String _) => null,
+        final regValName = regVal.name;
+
+        add(regValName, switch (regVal.value.type) {
+          RegistryValueType.dword ||
+          RegistryValueType.qword => k.getInt(regValName),
+          RegistryValueType.string => k.getString(regValName),
+          RegistryValueType.unexpandedString => k.getUnexpandedString(regValName),
+          RegistryValueType.multiString => k.getMultiString(regValName),
+          RegistryValueType.binary => k.getBinary(regValName),
+          _ => null
         });
       }
     } finally {
