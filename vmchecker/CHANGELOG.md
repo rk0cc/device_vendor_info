@@ -1,3 +1,10 @@
+## 2.0.0
+
+* Switch over to native hook implementation
+* Cease all Flutter dependencies that making it appliable into Dart-only platform.
+* Increase Dart SDK constraint to `^3.10.0`
+* Detection no longer execution in isolated worker
+
 ## 1.2.0+1
 
 * Fix version constraints unaligned problem.
