@@ -4,6 +4,8 @@
 * Ship hook implementation of `vmchecker` module.
     * Minimum Dart SDK becomes `^3.10.0` due to hooks implementations.
 * Cease Flutter dependencies.
+    * Default target platform can no longer be overriden during test since platform detection
+      relies on `Platform` from `dart:io` package now.
 
 ## 2.1.0+1
 
