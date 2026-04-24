@@ -41,14 +41,16 @@ final class UnixDeviceVendorInfoLoader
       }),
       _guardAssign(() async {
         version = await dictionary["bios_version"];
-      })
+      }),
     ]);
 
     return BiosInfo(
-        vendor: vendor,
-        version: version,
-        releaseDate:
-            releaseDate == null ? null : biosDateFormat.parse(releaseDate!));
+      vendor: vendor,
+      version: version,
+      releaseDate: releaseDate == null
+          ? null
+          : biosDateFormat.parse(releaseDate!),
+    );
   }
 
   @override
@@ -64,11 +66,14 @@ final class UnixDeviceVendorInfoLoader
       }),
       _guardAssign(() async {
         version = await dictionary["board_version"];
-      })
+      }),
     ]);
 
     return BoardInfo(
-        manufacturer: manufacturer, productName: productName, version: version);
+      manufacturer: manufacturer,
+      productName: productName,
+      version: version,
+    );
   }
 
   @override
@@ -87,14 +92,15 @@ final class UnixDeviceVendorInfoLoader
       }),
       _guardAssign(() async {
         family = await dictionary["product_family"];
-      })
+      }),
     ]);
 
     return SystemInfo(
-        family: family,
-        manufacturer: manufacturer,
-        productName: productName,
-        version: version);
+      family: family,
+      manufacturer: manufacturer,
+      productName: productName,
+      version: version,
+    );
   }
 
   @override

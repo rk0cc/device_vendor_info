@@ -1,3 +1,9 @@
+## 3.0.0
+
+* Ship hook implementation of `vmchecker` module.
+    * Minimum Dart SDK becomes `^3.10.0` due to hooks implementations.
+* Cease Flutter dependencies.
+
 ## 2.1.0+1
 
 * Fix version constraints unaligned problem.

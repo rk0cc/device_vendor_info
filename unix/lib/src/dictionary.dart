@@ -9,8 +9,10 @@ final class _UnixVendorDictionaryEntriesStream
   const _UnixVendorDictionaryEntriesStream();
 
   @override
-  Future<void> generateContent(DictionaryEntryStreamAdder<String> add,
-      DictionaryEntryStreamThrower addError) async {
+  Future<void> generateContent(
+    DictionaryEntryStreamAdder<String> add,
+    DictionaryEntryStreamThrower addError,
+  ) async {
     final Directory dmi = Directory(r"/sys/class/dmi/id/");
     assert(dmi.isAbsolute);
 
@@ -18,14 +20,18 @@ final class _UnixVendorDictionaryEntriesStream
       return;
     }
 
-    bool isReadable(int mode) => [mode >> 6, mode >> 3, mode]
-        .map((e) => e & 0x7)
-        .every((permission) => permission >= 0x4);
+    bool isReadable(int mode) => [
+      mode >> 6,
+      mode >> 3,
+      mode,
+    ].map((e) => e & 0x7).every((permission) => permission >= 0x4);
 
     final Stream<File> dmiFiles = dmi
         .list(followLinks: false)
-        .where((entity) =>
-            entity is File && isReadable(entity.statSync().mode & 0x1FF))
+        .where(
+          (entity) =>
+              entity is File && isReadable(entity.statSync().mode & 0x1FF),
+        )
         .cast<File>();
 
     await for (File f in dmiFiles) {
