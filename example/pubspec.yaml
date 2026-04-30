@@ -2,7 +2,6 @@ name: device_vendor_info_example
 description: "Demo Flutter application for fetching hardware informations"
 publish_to: 'none'
 version: 3.0.0
-resolution: workspace
 environment:
   sdk: ^3.10.0
 dependencies:

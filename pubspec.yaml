@@ -4,7 +4,6 @@ environment:
   sdk: ^3.10.0
 workspace:
   - bundle/
-  - example/
   - interface/
   - unix/
   - vmchecker/
