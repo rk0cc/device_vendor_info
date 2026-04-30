@@ -8,22 +8,18 @@ on:
       - 'bundle/**.dart'
 jobs:
   unittest:
-    name: Flutter unit test
+    name: Dart unit test
     env:
       working-directory: './bundle'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v6
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          channel: stable
-          flutter-version: '3.x'
+      - name: Setup Dart
+        uses: dart-lang/setup-dart@v1
       - name: Get dependencies
         working-directory: ${{ env.working-directory }}
-        run: flutter pub get
+        run: dart pub get
       - name: Perform test
         working-directory: ${{ env.working-directory }}
-        run: flutter test .
-  
+        run: dart test

@@ -16,13 +16,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
+      - name: Setup Dart
+        uses: dart-lang/setup-dart@v1
         with:
           channel: stable
       - name: Get dependencies
         working-directory: ${{ env.working-directory }}
-        run: flutter pub get
+        run: dart pub get
       - name: Run build file
         working-directory: ${{ env.working-directory }}
         run: dart run build_runner build --delete-conflicting-outputs
@@ -57,13 +57,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
+      - name: Setup Dart
+        uses: dart-lang/setup-dart@v1
         with:
           channel: stable
       - name: Get dependencies
         working-directory: ${{ env.working-directory }}
-        run: flutter pub get
+        run: dart pub get
       - name: Execute test
         working-directory: ${{ env.working-directory }}
-        run: flutter test
+        run: dart test
