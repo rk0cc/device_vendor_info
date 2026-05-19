@@ -4,7 +4,5 @@
 // ignore_for_file: type=lint, unused_import
 import 'dart:ffi' as ffi;
 
-@ffi.Native<ffi.Bool Function()>(
-	assetId: 'package:device_vendor_info_vmchecker/device_vendor_info_vmchecker.dart',
-)
+@ffi.Native<ffi.Bool Function()>()
 external bool is_hypervisor();

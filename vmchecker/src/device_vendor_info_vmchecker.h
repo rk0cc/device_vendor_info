@@ -1,12 +1,14 @@
 #ifndef DEVICE_VENDOR_INFO_VMCHECKER_H
 #define DEVICE_VENDOR_INFO_VMCHECKER_H
 
+#if !defined(__STDC_VERSION__) || __STDC_VERSION__ < 202311L
+#include <stdbool.h>
+#endif
+
 #ifdef __cplusplus
 extern "C"
 {
 #endif
-
-#include <stdbool.h>
 
 #if _WIN32
 #include <windows.h>

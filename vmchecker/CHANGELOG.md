@@ -1,3 +1,10 @@
+## 2.0.1
+
+* Expand version constraint of `hooks` due to new major release
+* Rename dynamic library name with no indication of OS and architecture.
+* Reconfigure `hook/build.dart` to align expected `assetId` from generated Dart code.
+* Add `tool` in `.pubignore`
+
 ## 2.0.0
 
 * Switch over to native hook implementation

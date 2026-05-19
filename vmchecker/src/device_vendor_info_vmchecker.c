@@ -1,12 +1,16 @@
 #include "device_vendor_info_vmchecker.h"
 
 #if _WIN32 && defined(_MSC_VER)
+#define __DVI_VMCHECKER_MSVC 1
+#define __DVI_VMCHECKER_CPUINFO_TYPE int
 #include <intrin.h>
-typedef int cpuinfo_reg;
 #else
+#define __DVI_VMCHECKER_MSVC 0
+#define __DVI_VMCHECKER_CPUINFO_TYPE unsigned int
 #include <cpuid.h>
-typedef unsigned int cpuinfo_reg;
 #endif
+
+typedef __DVI_VMCHECKER_CPUINFO_TYPE cpuinfo_reg;
 
 // Determine the running platform is under hypervisor mode, which
 // denotes this program is executed inside of virtual machine or container
@@ -15,7 +19,7 @@ bool is_hypervisor()
 {
     cpuinfo_reg cpuinfo[4];
 
-#if _WIN32 && defined(_MSC_VER)
+#if __DVI_VMCHECKER_MSVC
     __cpuid(cpuinfo, 1);
 #else
     __get_cpuid(1, &cpuinfo[0], &cpuinfo[1], &cpuinfo[2], &cpuinfo[3]);
