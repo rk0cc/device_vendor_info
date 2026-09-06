@@ -1,3 +1,7 @@
+## 2.0.2
+
+* Expande dependcies version constraint
+
 ## 2.0.1
 
 * Expand version constraint of `hooks` due to new major release
